@@ -25,7 +25,7 @@ export default function AdminPageHeader({
       >
         {title}
       </h1>
-      <p className="font-arial font-[400] lg:text-[17px] text-[15px] leading-5 text-dark-gray-2">
+      <p className="font-arial font-[400] lg:text-[17px] text-[15px] leading-5 text-dark-gray-2 mb-6">
         {subtitle}
       </p>
     </div>
@@ -36,7 +36,7 @@ export default function AdminPageHeader({
   }
 
   return (
-    <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <div className="flex flex-wrap items-center justify-between gap-4">
       {heading}
       {action}
     </div>
