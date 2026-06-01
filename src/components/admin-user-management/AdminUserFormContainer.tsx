@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/select";
 import { PasswordInput } from "@/components/custom/PasswordInput";
 import AdminPageHeader from "@/components/admin-page-header/AdminPageHeader";
+import { adminHeaderActionButtonClassName } from "@/components/admin-page-header/AdminHeaderActionButton";
+import { cn } from "@/lib/utils";
 import {
   createUserSchema,
   updateUserSchema,
@@ -40,17 +42,17 @@ export default function AdminUserFormContainer({ mode, initial }: Props) {
     resolver: zodResolver(isEdit ? updateUserSchema : createUserSchema),
     defaultValues: isEdit
       ? {
-          name: initial?.name ?? "",
-          email: initial?.email ?? "",
-          role: initial?.role ?? userRole.USER,
-          password: "",
-        }
+        name: initial?.name ?? "",
+        email: initial?.email ?? "",
+        role: initial?.role ?? userRole.USER,
+        password: "",
+      }
       : {
-          name: "",
-          email: "",
-          password: "",
-          role: userRole.USER,
-        },
+        name: "",
+        email: "",
+        password: "",
+        role: userRole.USER,
+      },
   });
 
   const {
@@ -160,7 +162,12 @@ export default function AdminUserFormContainer({ mode, initial }: Props) {
           />
         </div>
         <div className="flex gap-3 pt-2">
-          <Button type="submit" loading={isSubmitting} variant="gradientCurved">
+          <Button
+            type="submit"
+            loading={isSubmitting}
+            size="sm"
+            className={cn(adminHeaderActionButtonClassName, "w-auto")}
+          >
             {isEdit ? "Save Changes" : "Create User"}
           </Button>
           <Button

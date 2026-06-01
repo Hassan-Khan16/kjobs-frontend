@@ -1,4 +1,5 @@
 import AdminPageHeader from "@/components/admin-page-header/AdminPageHeader";
+import { AdminHeaderActionButton } from "@/components/admin-page-header/AdminHeaderActionButton";
 import AdminEmployerManagement from "@/components/admin-employer-management/AdminEmployerManagement";
 
 export default function AdminEmployersPage() {
@@ -7,6 +8,11 @@ export default function AdminEmployersPage() {
       <AdminPageHeader
         title="Employers Management"
         subtitle="Manage employer accounts and companies"
+        action={
+          <AdminHeaderActionButton href="/admin/employers/create">
+            Create Employer
+          </AdminHeaderActionButton>
+        }
       />
       <AdminEmployerManagement />
     </div>

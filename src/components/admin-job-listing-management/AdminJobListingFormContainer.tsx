@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import AdminPageHeader from "@/components/admin-page-header/AdminPageHeader";
+import { adminHeaderActionButtonClassName } from "@/components/admin-page-header/AdminHeaderActionButton";
+import { cn } from "@/lib/utils";
 import {
   createJobListingSchema,
   type CreateJobListingFormData,
@@ -109,8 +111,13 @@ export default function AdminJobListingFormContainer({ mode, initial }: Props) {
           />
         </div>
         <div className="flex gap-3">
-          <Button type="submit" loading={isSubmitting} variant="gradientCurved">
-            Save
+          <Button
+            type="submit"
+            loading={isSubmitting}
+            size="sm"
+            className={cn(adminHeaderActionButtonClassName, "w-auto")}
+          >
+            {isEdit ? "Save Changes" : "Create Job"}
           </Button>
           <Button type="button" variant="outline" onClick={() => router.back()}>
             Cancel

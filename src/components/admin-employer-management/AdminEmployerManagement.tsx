@@ -2,9 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
 import AdminPagedDataTableShell from "@/components/admin-paged-data-table-shell/AdminPagedDataTableShell";
 import {
   TableSearchFilterHeader,
@@ -107,11 +105,6 @@ export default function AdminEmployerManagement() {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
-        <Button asChild variant="gradientCurved">
-          <Link href="/admin/employers/create">Create Employer</Link>
-        </Button>
-      </div>
       <TableSearchFilterHeader
         searchValue={search}
         onSearchChange={setSearch}

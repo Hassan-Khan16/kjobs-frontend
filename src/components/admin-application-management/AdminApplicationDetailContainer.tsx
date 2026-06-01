@@ -12,6 +12,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { adminHeaderActionButtonClassName } from "@/components/admin-page-header/AdminHeaderActionButton";
+import { cn } from "@/lib/utils";
 import { patchApplicationStatus } from "@/services/application-service";
 import type { AdminApplication, ApplicationStatus } from "@/types/application";
 import { applicationStatus } from "@/enum/status";
@@ -79,8 +81,9 @@ export default function AdminApplicationDetailContainer({
               </SelectContent>
             </Select>
             <Button
-              variant="gradientCurved"
               loading={loading}
+              size="sm"
+              className={cn(adminHeaderActionButtonClassName, "w-auto")}
               onClick={saveStatus}
             >
               Save

@@ -6,16 +6,16 @@ type AdminPageHeaderProps = {
   title: string;
   subtitle: string;
   titleClassName?: string;
+  action?: React.ReactNode;
 };
 
 export default function AdminPageHeader({
   title,
   subtitle,
   titleClassName,
+  action,
 }: AdminPageHeaderProps) {
-
-  
-  return (
+  const heading = (
     <div>
       <h1
         className={cn(
@@ -30,5 +30,15 @@ export default function AdminPageHeader({
       </p>
     </div>
   );
-}
 
+  if (!action) {
+    return heading;
+  }
+
+  return (
+    <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+      {heading}
+      {action}
+    </div>
+  );
+}

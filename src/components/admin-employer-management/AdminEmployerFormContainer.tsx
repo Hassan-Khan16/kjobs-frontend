@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/custom/PasswordInput";
 import AdminPageHeader from "@/components/admin-page-header/AdminPageHeader";
+import { adminHeaderActionButtonClassName } from "@/components/admin-page-header/AdminHeaderActionButton";
+import { cn } from "@/lib/utils";
 import {
   createEmployerSchema,
   updateEmployerSchema,
@@ -126,8 +128,13 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
           />
         </div>
         <div className="flex gap-3">
-          <Button type="submit" loading={isSubmitting} variant="gradientCurved">
-            Save
+          <Button
+            type="submit"
+            loading={isSubmitting}
+            size="sm"
+            className={cn(adminHeaderActionButtonClassName, "w-auto")}
+          >
+            {isEdit ? "Save Changes" : "Create Employer"}
           </Button>
           <Button type="button" variant="outline" onClick={() => router.back()}>
             Cancel
