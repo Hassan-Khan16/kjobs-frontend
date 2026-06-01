@@ -1,0 +1,26 @@
+---
+description: KJobs frontend folder structure (aligned with Wellsnax)
+globs: src/**/*
+alwaysApply: true
+---
+
+# KJobs `src/` folder structure
+
+Place code by **responsibility**, not file size. **`lib/` is not a catch-all** — reserve it for integrations and app infrastructure.
+
+| Folder | Put here |
+|--------|----------|
+| `app/` | Next.js routes, layouts, page wiring |
+| `components/` | React UI; feature subfolders |
+| `services/` | API calls (`*-service.ts`) via `fetch/` + `utils/endpoint.ts` |
+| `fetch/` | Shared HTTP client |
+| `types/` | TypeScript types/interfaces |
+| `schemas/` | Zod schemas + validation |
+| `enum/` | Shared enums |
+| `constants/` | Static values only |
+| `config/` | Domain UI lookup maps (status badges) |
+| `helper/` | Domain helpers, toast, API mappers |
+| `lib/` | NextAuth, `cn()`, form glue |
+| `hooks/` | Shared React hooks |
+| `store/` | Zustand slices |
+| `data/` | Static nav / seed data |

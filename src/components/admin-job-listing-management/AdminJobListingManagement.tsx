@@ -1,0 +1,161 @@
+"use client";
+
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
+import AdminPagedDataTableShell from "@/components/admin-paged-data-table-shell/AdminPagedDataTableShell";
+import {
+  TableSearchFilterHeader,
+  DEFAULT_TABLE_STATUS_FILTER_OPTIONS,
+} from "@/components/table-search-filter-header/TableSearchFilterHeader";
+import ConfirmDialog from "@/components/ui/confirm-dialog";
+import { AdminTableIconActions } from "@/components/admin-table-icon-actions/AdminTableIconActions";
+import { StatusBadge } from "@/components/status-badge/StatusBadge";
+import { useDebounce } from "@/hooks/use-debounce";
+import { PAGE_SIZE, API_UNAVAILABLE_MESSAGE } from "@/constants";
+import {
+  getJobListings,
+  patchJobListingStatus,
+} from "@/services/job-listing-service";
+import type { AdminJobListingListItem } from "@/types/job-listing";
+import { handleOpenToast } from "@/helper/toast";
+
+const jobStatusOptions = [
+  { value: "all", label: "All Status" },
+  { value: "open", label: "Open" },
+  { value: "closed", label: "Closed" },
+];
+
+export default function AdminJobListingManagement() {
+  const router = useRouter();
+  const [search, setSearch] = React.useState("");
+  const [statusFilter, setStatusFilter] = React.useState("all");
+  const [page, setPage] = React.useState(1);
+  const [items, setItems] = React.useState<AdminJobListingListItem[]>([]);
+  const [total, setTotal] = React.useState(0);
+  const [totalPages, setTotalPages] = React.useState(0);
+  const [loading, setLoading] = React.useState(false);
+  const [statusTarget, setStatusTarget] =
+    React.useState<AdminJobListingListItem | null>(null);
+  const [statusLoading, setStatusLoading] = React.useState(false);
+  const debouncedSearch = useDebounce(search, 500);
+
+  React.useEffect(() => setPage(1), [debouncedSearch, statusFilter]);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      const res = await getJobListings({
+        page,
+        limit: PAGE_SIZE,
+        search: debouncedSearch,
+        status: statusFilter,
+      });
+      if (cancelled) return;
+      setLoading(false);
+      setItems(res.data.items);
+      setTotal(res.data.meta.total);
+      setTotalPages(res.data.meta.totalPages);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [page, debouncedSearch, statusFilter]);
+
+  const columns: ColumnDef<AdminJobListingListItem>[] = [
+    { accessorKey: "title", header: "Title" },
+    { accessorKey: "employerName", header: "Employer" },
+    { accessorKey: "location", header: "Location" },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => <StatusBadge status={row.original.status} />,
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => (
+        <AdminTableIconActions
+          onView={() =>
+            router.push(`/admin/job-listings/${row.original.id}`)
+          }
+          onEdit={() =>
+            router.push(`/admin/job-listings/${row.original.id}/edit`)
+          }
+          onDelete={() => setStatusTarget(row.original)}
+        />
+      ),
+    },
+  ];
+
+  const confirmStatus = async () => {
+    if (!statusTarget) return;
+    setStatusLoading(true);
+    const next = statusTarget.status === "open" ? "closed" : ("open" as const);
+    const res = await patchJobListingStatus(statusTarget.id, next);
+    setStatusLoading(false);
+    if (!res.success) {
+      handleOpenToast(res.message || API_UNAVAILABLE_MESSAGE, "error");
+      return;
+    }
+    handleOpenToast(`Job marked as ${next}`, "success");
+    setStatusTarget(null);
+    const listRes = await getJobListings({
+      page,
+      limit: PAGE_SIZE,
+      search: debouncedSearch,
+      status: statusFilter,
+    });
+    setItems(listRes.data.items);
+  };
+
+  const start = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
+  const end = Math.min(page * PAGE_SIZE, total);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <Button asChild variant="gradientCurved">
+          <Link href="/admin/job-listings/create">Create Job</Link>
+        </Button>
+      </div>
+      <TableSearchFilterHeader
+        searchValue={search}
+        onSearchChange={setSearch}
+        searchPlaceholder="Search jobs..."
+        filterValue={statusFilter}
+        onFilterChange={setStatusFilter}
+        filterOptions={jobStatusOptions}
+      />
+      <AdminPagedDataTableShell
+        columns={columns}
+        data={items}
+        page={page}
+        totalPages={Math.max(totalPages, 1)}
+        onPageChange={setPage}
+        start={start}
+        end={end}
+        total={total}
+        paginationLabel="jobs"
+        loading={loading}
+      />
+      <ConfirmDialog
+        open={!!statusTarget}
+        onOpenChange={(open) => !open && setStatusTarget(null)}
+        title={
+          statusTarget?.status === "open" ? "Close job?" : "Open job?"
+        }
+        description={
+          statusTarget
+            ? `${statusTarget.status === "open" ? "Close" : "Open"} "${statusTarget.title}"?`
+            : ""
+        }
+        onConfirm={confirmStatus}
+        loading={statusLoading}
+      />
+    </div>
+  );
+}
