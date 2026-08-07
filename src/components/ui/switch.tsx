@@ -17,7 +17,7 @@ function Switch({
     <SwitchPrimitive.Root
       data-slot="switch"
       className={cn(
-        "peer inline-flex shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-orange-400 disabled:cursor-not-allowed disabled:opacity-50",
+        "peer inline-flex shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-brand-royal disabled:cursor-not-allowed disabled:opacity-50",
         size === "xsmall"
           ? "h-3 w-7 lg:h-3.5 lg:w-9"
           : size === "small"
@@ -25,7 +25,7 @@ function Switch({
             : "h-7 w-14 lg:h-6 lg:w-12",
         bgClassName
           ? bgClassName
-          : "bg-gray-30 data-[state=checked]:bg-[image:var(--gradient-orange-2)]",
+          : "bg-gray-30 data-[state=checked]:bg-[image:var(--gradiant-dark-blue-2)]",
         className,
       )}
       {...props}

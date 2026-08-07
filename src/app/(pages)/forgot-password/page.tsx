@@ -1,4 +1,4 @@
-import AuthLayout from "../(auth)/layout";
+import { AuthLayout } from "../(auth)/layout";
 import AdminPageHeader from "@/components/admin-page-header/AdminPageHeader";
 import Link from "next/link";
 

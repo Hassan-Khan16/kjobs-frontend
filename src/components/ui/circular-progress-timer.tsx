@@ -29,7 +29,7 @@ export const CircularProgressTimer = ({
   totalDuration,
   onExpire,
   size = 140,
-  strokeColor = "#FFA726",
+  strokeColor = "#2F5BDE",
   strokeWidth = 3,
 }: CircularProgressTimerProps) => {
   const [timeLeft, setTimeLeft] = React.useState(() => calculateTimeLeft(expiresAt));
@@ -75,7 +75,7 @@ export const CircularProgressTimer = ({
           className="transition-all duration-1000 ease-linear"
         />
       </svg>
-      <div className="absolute inset-0 flex items-center justify-center bg-orange-80 rounded-full m-4">
+      <div className="absolute inset-0 flex items-center justify-center bg-sky-blue-40 rounded-full m-4">
         <span className="text-[18px] font-inter font-[400] text-foreground-101">
           {formatTime(timeLeft)}
         </span>

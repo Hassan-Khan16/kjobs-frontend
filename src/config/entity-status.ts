@@ -4,8 +4,8 @@ export const entityStatusConfig: Record<
 > = {
   active: {
     label: "Active",
-    bg: "bg-green-20",
-    text: "text-green-8",
+    bg: "bg-sky-blue-40",
+    text: "text-brand-royal",
   },
   inactive: {
     label: "Inactive",
@@ -24,8 +24,8 @@ export const entityStatusConfig: Record<
   },
   pending: {
     label: "Pending",
-    bg: "bg-yellow-20",
-    text: "text-yellow-60",
+    bg: "bg-sky-blue-20",
+    text: "text-dark-blue-5",
   },
   reviewed: {
     label: "Reviewed",
@@ -34,17 +34,17 @@ export const entityStatusConfig: Record<
   },
   shortlisted: {
     label: "Shortlisted",
-    bg: "bg-light-purple",
-    text: "text-purple-20",
+    bg: "bg-indigo-10",
+    text: "text-indigo-20",
   },
   rejected: {
     label: "Rejected",
-    bg: "bg-red-10",
-    text: "text-red-20",
+    bg: "bg-navy-10",
+    text: "text-navy-20",
   },
   hired: {
     label: "Hired",
-    bg: "bg-green-20",
-    text: "text-green-8",
+    bg: "bg-sky-blue-40",
+    text: "text-brand-royal",
   },
 };

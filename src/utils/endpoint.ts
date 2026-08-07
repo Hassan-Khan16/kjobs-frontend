@@ -1,5 +1,11 @@
 export const apiEndpoint = {
   prefix: "/api",
+  userRegister: "/auth/user/register",
+  userLogin: "/auth/user/login",
+  employerRegister: "/auth/employer/register",
+  employerLogin: "/auth/employer/login",
+  authMe: "/auth/me",
+  authLogout: "/auth/logout",
   adminLogin: "/admin/login",
   adminLogout: "/admin/logout",
   adminMe: "/admin/me",
@@ -21,12 +27,19 @@ export const apiEndpoint = {
 };
 
 export const appRoutes = {
+  home: "/",
   adminLogin: "/admin/login",
   adminDashboard: "/admin/dashboard",
   adminUsers: "/admin/users",
   adminEmployers: "/admin/employers",
   adminJobListings: "/admin/job-listings",
   adminApplications: "/admin/applications",
+  userLogin: "/user/login",
+  userRegister: "/user/register",
+  userDashboard: "/user/dashboard",
+  employerLogin: "/employer/login",
+  employerRegister: "/employer/register",
+  employerDashboard: "/employer/dashboard",
 };
 
 export function replacePathParams(

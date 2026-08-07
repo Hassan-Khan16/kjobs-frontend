@@ -8,7 +8,7 @@ const textVariants = cva("", {
     variant: {
       p1: "text-[11px] font-inter text-gray-109 mt-1 leading-tight ",
       p2: "font-inter font-regular text-[14px] lg:text-[14px] text-dark-gray leading-5",
-      p3: "text-purple-20 text-[12px] font-regular font-inter",
+      p3: "text-indigo-20 text-[12px] font-regular font-inter",
       p4: "text-dark-gray text-sm font-arial font-400",
       p5: "font-poppins text-center font-light text-[10px] xs:text-[15px] sm:text-[15px] lg:text-left lg:text-[16px] text-foreground-70 lg:text-background ",
       p6: "text-dark-gray text-center text-[12px] xs:text-[14px] sm:text-[16px] lg:text-[17px] font-poppins  font-regular",

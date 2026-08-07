@@ -1,14 +1,16 @@
 import { toast } from "sonner";
 
+import { BRAND_COLORS } from "@/constants/brand-colors";
+
 export const handleOpenToast = (
   title: string,
-  status: "success" | "error" | "info" | "warning"
+  status: "success" | "error" | "info" | "warning",
 ): void => {
   switch (status) {
     case "success":
       toast.success(title, {
         style: {
-          backgroundColor: "#4BB543",
+          backgroundColor: BRAND_COLORS.royal,
           color: "white",
           fontSize: "17px",
           gap: "4px",
@@ -19,7 +21,7 @@ export const handleOpenToast = (
     case "error":
       toast.error(title, {
         style: {
-          backgroundColor: "#dc2626",
+          backgroundColor: BRAND_COLORS.destructive,
           color: "white",
           fontSize: "17px",
           gap: "4px",
@@ -29,7 +31,6 @@ export const handleOpenToast = (
       break;
   }
 };
-
 
 export const getDuplicateUsers = (data: { name: string }[]) => {
   const counts: Record<string, number> = {};

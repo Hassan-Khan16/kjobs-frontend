@@ -20,26 +20,27 @@ const badgeVariants = cva(
         selectable:
           "px-4 py-2 text-[14px] font-poppins font-normal bg-gray-102 text-foreground-10 border-gray-20 hover:border-gray-30",
         selectableActive:
-          "px-4 py-2 text-[14px] font-poppins font-normal bg-(image:--gradient-orange) text-background border-transparent",
+          "px-4 py-2 text-[14px] font-poppins font-normal bg-(image:--gradient-brand-horizontal) text-primary-foreground border-transparent",
         upcoming:
           "px-3 py-1 text-[12px] font-inter font-bold bg-sky-blue-40 text-dark-blue-3 border-none",
         eventType:
-          "px-3 py-1 text-[12px] font-inter font-bold bg-light-purple text-purple-20 border-none",
+          "px-3 py-1 text-[12px] font-inter font-bold bg-indigo-10 text-indigo-20 border-none",
         recommended:
-          "rounded-[6px] border-none bg-(image:--gradiant-orange-pink-3) px-2 py-0.5 font-inter text-[11px] font-medium text-background lg:text-[10px]",
+          "rounded-[6px] border-none bg-(image:--gradient-blue-indigo) px-2 py-0.5 font-inter text-[11px] font-medium text-primary-foreground lg:text-[10px]",
         targetAthlete:
           "justify-start rounded-[8px] border-[0.8px] border-gray-107 bg-background px-[7px] py-[2px] font-inter text-[12px] font-medium capitalize text-foreground-10 lg:text-[11px] gap-2 shadow-none [&>svg]:shrink-0 [&>svg]:text-foreground-20",
         pending:
-          "text-brown-40 border-yellow-20 bg-white rounded-[8px] px-2 py-1 h-auto",
+          "text-dark-blue-5 border-sky-blue-10 bg-white rounded-[8px] px-2 py-1 h-auto",
         approved:
-          "text-green-1 border-green-8 bg-white rounded-[8px] px-2 py-1 h-auto",
+          "text-brand-royal border-sky-blue-40 bg-white rounded-[8px] px-2 py-1 h-auto",
         rejected:
-          "text-orange-100 border-orange-100 bg-orange-100/10 rounded-[8px] px-2 py-1 h-auto",
+          "text-navy-20 border-navy-10 bg-navy-10 rounded-[8px] px-2 py-1 h-auto",
         fillPublished:
-          "border-transparent bg-light-green-3 px-2,5 py-1.5 font-inter text-[12px] font-medium leading-none text-green-10 shadow-none",
+          "border-transparent bg-sky-blue-20 px-2.5 py-1.5 font-inter text-[12px] font-medium leading-none text-brand-royal shadow-none",
         fillDraft:
-          "border-transparent bg-yellow-60 px-3 py-1 font-inter text-[12px] font-medium leading-none text-brown-40 shadow-none",
-          quize:"rounded-[4px] rounded-[4px] px-[7px] py-[2px] border-none font-inter font-[500] text-[11px] lg:text-[12px]"
+          "border-transparent bg-gray-102 px-3 py-1 font-inter text-[12px] font-medium leading-none text-dark-gray shadow-none",
+        quize:
+          "rounded-[4px] px-[7px] py-[2px] border-none font-inter font-medium text-[11px] lg:text-[12px]",
       },
     },
     defaultVariants: {

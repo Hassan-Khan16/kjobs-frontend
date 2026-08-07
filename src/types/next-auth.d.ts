@@ -1,13 +1,13 @@
-import type { AdminSessionUser } from "./auth";
+import type { SessionUser } from "./auth";
 
 declare module "next-auth" {
   interface User {
     token?: { accessToken: string; refreshToken?: string };
-    user?: AdminSessionUser;
+    user?: SessionUser;
   }
 
   interface Session {
-    user: AdminSessionUser;
+    user: SessionUser;
     accessToken: string;
     refreshToken?: string;
   }
@@ -15,7 +15,7 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
   interface JWT {
-    user: AdminSessionUser;
+    user: SessionUser;
     accessToken: string;
     refreshToken?: string;
   }
