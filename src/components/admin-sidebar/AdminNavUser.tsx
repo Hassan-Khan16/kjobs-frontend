@@ -1,24 +1,16 @@
 "use client";
 
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { adminLogout } from "@/services/auth-service";
-import { clearTokenCache } from "@/fetch/fetch";
+import { logoutClient } from "@/helper/logout-client";
+import { userRole } from "@/enum/role";
 
 export function AdminNavUser() {
   const { data: session } = useSession();
   const name = session?.user?.name ?? session?.user?.email ?? "Admin";
 
-  const handleLogout = async () => {
-    try {
-      await adminLogout();
-    } catch {
-      /* ignore */
-    }
-    clearTokenCache();
-    await signOut({ callbackUrl: "/admin/login" });
-  };
+  const handleLogout = () => logoutClient(userRole.ADMIN);
 
   return (
     <div className="flex items-center gap-3">

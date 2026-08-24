@@ -84,18 +84,11 @@ export default function Pagination({
                 isActive &&
                   !buttonClassName &&
                   (useArrowtheme
-                    ? "bg-(image:--gradient-orange-3) text-white border-orange-80"
+                    ? "bg-(image:--gradiant-dark-blue-2) text-white border-brand-royal"
                     : "bg-dark-blue-3 text-white border-dark-blue-3"),
                 !isActive && "bg-background text-dark-gray border-gray-20 hover:bg-gray-102",
                 isActive && buttonClassName
               )}
-              //  className={cn(
-              //    "min-w-8 cursor-pointer h-8 px-2 rounded-md text-sm font-inter border",
-              //    isActive
-              //      ? `  ${useArrowtheme ?  `bg-(image:--gradient-orange-3) ${buttonClassName}`  : "bg-dark-blue-3"} text-white ${useArrowtheme ? "border-orange-80" : "border-dark-blue-3"}`
-              //      : "bg-background text-dark-gray border-gray-20 hover:bg-gray-102",
-              //    buttonClassName,
-              //  )}
              >
                {item}
              </button>

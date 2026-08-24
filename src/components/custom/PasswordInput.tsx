@@ -9,7 +9,7 @@ export interface PasswordInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
   errorMessage?: string;
-  variant?: "default" | "outline" | "filled" | "whitebg";
+  variant?: "default" | "outline" | "outline3" | "filled" | "whitebg";
 }
 
 const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
@@ -18,9 +18,10 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
 
     const variantStyles = {
       whitebg:
-      "lg:rounded-[16px] rounded-[14px] text-[14px] text-gray-10 border-[0.8px] bg-white-blur border-border-gray lg:py-[23px] py-[22px] px-[12px] font-poppins font-[400] w-full",
-      
-    }
+        "lg:rounded-[16px] rounded-[14px] text-[14px] text-gray-10 border-[0.8px] bg-white-blur border-border-gray lg:py-[23px] py-[22px] px-[12px] font-poppins font-[400] w-full",
+      outline3:
+        "h-10 rounded-[10px] bg-white border-[0.8px] border-gray-118 text-foreground-10 placeholder:text-dark-gray-7 font-inter w-full text-[14px] placeholder:text-[13px] font-normal placeholder:font-[400]",
+    };
     return (
       <div className="w-full">
         <div className="relative w-full">

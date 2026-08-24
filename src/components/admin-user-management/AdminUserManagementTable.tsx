@@ -1,6 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { formatUserRole } from "@/helper/user";
 import type { AdminUserListItem } from "@/types/user";
 import { AdminTableIconActions } from "@/components/admin-table-icon-actions/AdminTableIconActions";
 import { StatusBadge } from "@/components/status-badge/StatusBadge";
@@ -13,7 +14,11 @@ export function buildUserColumns(handlers: {
   return [
     { accessorKey: "name", header: "Name" },
     { accessorKey: "email", header: "Email" },
-    { accessorKey: "role", header: "Role" },
+    {
+      accessorKey: "role",
+      header: "Role",
+      cell: ({ row }) => formatUserRole(row.original.role),
+    },
     {
       accessorKey: "status",
       header: "Status",

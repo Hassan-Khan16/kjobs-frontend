@@ -3,6 +3,7 @@
 import AdminPageHeader from "@/components/admin-page-header/AdminPageHeader";
 import { AdminHeaderActionButton } from "@/components/admin-page-header/AdminHeaderActionButton";
 import { StatusBadge } from "@/components/status-badge/StatusBadge";
+import { formatUserRole } from "@/helper/user";
 import type { AdminUser } from "@/types/user";
 
 export default function AdminUserDetailContainer({ user }: { user: AdminUser }) {
@@ -20,7 +21,7 @@ export default function AdminUserDetailContainer({ user }: { user: AdminUser }) 
       <dl className="grid gap-4 max-w-xl rounded-[10px] border border-gray-105 bg-background p-6">
         <div>
           <dt className="text-sm text-gray-116">Role</dt>
-          <dd className="font-medium capitalize">{user.role}</dd>
+          <dd className="font-medium">{formatUserRole(user.role)}</dd>
         </div>
         <div>
           <dt className="text-sm text-gray-116">Status</dt>

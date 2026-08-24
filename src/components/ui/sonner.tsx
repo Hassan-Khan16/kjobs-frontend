@@ -65,12 +65,12 @@ const Toaster = ({ ...props }: ToasterProps) => {
           closeButton:
             "absolute right-3 top-1/2 -translate-y-1/2 bg-background hover:opacity-60 focus:opacity-100 transition-opacity",
           success:
-            "!bg-gradient-to-r !from-[#10b981] !to-[#059669] !text-white !border-0 !shadow-lg !rounded-xl",
+            "!bg-gradient-to-r !from-[#2F5BDE] !to-[#191C33] !text-white !border-0 !shadow-lg !rounded-xl",
           error:
             "!bg-gradient-to-r !from-[#ef4444] !to-[#dc2626] !text-white !border-0 !shadow-lg !rounded-xl [&_button]:text-white/80 hover:[&_button]:text-white",
-          info: "!bg-gradient-to-r !from-[#3b82f6] !to-[#2563eb] !text-white !border-0 !shadow-lg !rounded-xl",
+          info: "!bg-gradient-to-r !from-[#38BDF8] !to-[#2F5BDE] !text-white !border-0 !shadow-lg !rounded-xl",
           warning:
-            "!bg-gradient-to-r !from-[#f59e0b] !to-[#d97706] !text-white !border-0 !shadow-lg !rounded-xl",
+            "!bg-gradient-to-r !from-[#6366F1] !to-[#243B6B] !text-white !border-0 !shadow-lg !rounded-xl",
           toast:
             "!p-4 !gap-3 !backdrop-blur-sm !font-medium !text-sm md:!text-base",
         },

@@ -45,7 +45,7 @@ export default function RootLayout({
             forcedTheme="light"
             disableTransitionOnChange
           >
-            <NextTopLoader color="var(--dark-pink)" />
+            <NextTopLoader color="var(--brand-royal)" />
             {children}
             <Toaster position="bottom-right" />
           </ThemeProvider>

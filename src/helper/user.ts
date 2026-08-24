@@ -13,6 +13,13 @@ export type ApiUserRaw = {
   updatedAt?: string;
 };
 
+/** Display label for API role slugs (e.g. `admin` → `Admin`). */
+export function formatUserRole(role: string): string {
+  const normalized = role.trim().toLowerCase();
+  if (!normalized) return "—";
+  return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+}
+
 export function mapApiUser(raw: ApiUserRaw): AdminUser {
   return {
     id: String(raw.id),

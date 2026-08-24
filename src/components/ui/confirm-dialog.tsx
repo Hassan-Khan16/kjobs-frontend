@@ -78,17 +78,17 @@ const ConfirmDialog = ({
               "p-5 rounded-t-[16px]",
               variant === "nla-delete"
                 ? "bg-white border-b border-gray-105 p-6"
-                : "bg-pink-102",
+                : "bg-sky-blue-20",
             )}
           >
             <div className="flex gap-2 items-center ">
               {variant === "nla-delete" ? null : variant ===
                 "destructive" ? (
-                <CircleAlert className="size-5 text-dark-pink" />
+                <CircleAlert className="size-5 text-destructive" />
               ) : variant === "restore" ? (
-                <RotateCcw className="size-5 text-dark-pink" />
+                <RotateCcw className="size-5 text-brand-royal" />
               ) : (
-                <Trash2 className="size-5 text-dark-pink" />
+                <Trash2 className="size-5 text-destructive" />
               )}
               <DialogTitle
                 className={cn(
@@ -116,7 +116,7 @@ const ConfirmDialog = ({
             "flex flex-row py-5 px-4 justify-end gap-2 pt-4 sm:justify-end",
             variant === "nla-delete"
               ? "bg-white p-6"
-              : "bg-gray-106 rounded-b-[20px]",
+              : "bg-gray-102 rounded-b-[20px]",
           )}
         >
           <Button
@@ -139,7 +139,7 @@ const ConfirmDialog = ({
             className={cn(
               "rounded-lg font-inter font-[500] text-[14px] ",
               variant === "nla-delete" &&
-                "bg-dark-pink text-white rounded-[10px] h-10 px-6",
+                "rounded-[10px] h-10 px-6",
             )}
             variant={variant === "nla-delete" ? "destructive" : variant}
           >

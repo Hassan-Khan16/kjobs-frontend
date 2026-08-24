@@ -32,8 +32,8 @@ interface DataTableProps<TData, TValue = unknown> {
   headerCellClassName?: string;
   /** Applied to the pagination / “Showing x of y” footer bar */
   footerClassName?: string;
-  footerTextClassName?:string
-  paginationBtnClassName?:string
+  footerTextClassName?: string
+  paginationBtnClassName?: string
   page?: number;
   totalPages?: number;
   onPageChange?: (page: number) => void;
@@ -102,9 +102,9 @@ export function DataTable<TData, TValue = unknown>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
                   </TableHead>
                 ))}
               </TableRow>
@@ -160,10 +160,10 @@ export function DataTable<TData, TValue = unknown>({
             totalPages={totalPages}
             onPageChange={onPageChange}
             useArrowtheme={false}
-            buttonClassName={cn("bg-dark-pink text-white border-dark-pink hover:bg-dark-pink ",
+            buttonClassName={cn("bg-primary text-primary-foreground border-primary hover:bg-primary/90 ",
               paginationBtnClassName
             )}
-  
+
           />
         </div>
       )}

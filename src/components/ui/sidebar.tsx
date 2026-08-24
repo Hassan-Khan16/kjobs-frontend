@@ -488,7 +488,7 @@ const sidebarMenuButtonVariants = cva(
         navLink:
           "text-md lg:text-[12px] font-semibold font-inter w-max cursor-pointer py-[24px] lg:py-[19px] w-max px-3 rounded-[14px] transition-all duration-200 ease-linear",
         activeLink:
-          " stroke-red-500 text-white  shadow-[0_4px_6px_-4px_#0000001A,0_10px_15px_-3px_#0000001A] py-[24px]  w-max px-3 bg-(image:--gradient-orange-2) text-white hover:bg-(image:--gradient-orange-2) rounded-[14px] transition-all duration-200 ease-linear hover:text-white",
+          "text-white shadow-[0_4px_6px_-4px_#0000001A,0_10px_15px_-3px_#0000001A] py-[24px] w-max px-3 bg-(image:--gradiant-dark-blue-2) hover:bg-(image:--gradiant-dark-blue-2) rounded-[14px] transition-all duration-200 ease-linear hover:text-white",
         outline:
           "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
       },

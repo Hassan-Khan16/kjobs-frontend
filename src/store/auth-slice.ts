@@ -1,11 +1,11 @@
 import type { StateCreator } from "zustand";
-import type { AdminSessionUser } from "@/types/auth";
+import type { SessionUser } from "@/types/auth";
 
 export type AuthSlice = {
-  user: AdminSessionUser | null;
+  user: SessionUser | null;
   accessToken: string | null;
   setAuth: (payload: {
-    user: AdminSessionUser;
+    user: SessionUser;
     accessToken: string;
   }) => void;
   clearAuth: () => void;

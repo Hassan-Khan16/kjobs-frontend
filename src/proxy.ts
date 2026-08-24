@@ -3,11 +3,28 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { userRole } from "@/enum/role";
 import { appRoutes } from "@/utils/endpoint";
+import {
+  getRedirectUrlForRole,
+  getLoginUrlForRole,
+  isPublicAuthPath,
+  normalizeRole,
+} from "@/helper/auth";
 
-const AUTH_PATHS = ["/admin/login", "/forgot-password"];
+function isUserAuthPath(pathname: string): boolean {
+  return (
+    pathname === appRoutes.userLogin || pathname === appRoutes.userRegister
+  );
+}
 
-function isAuthPath(pathname: string): boolean {
-  return AUTH_PATHS.some((p) => pathname === p);
+function isEmployerAuthPath(pathname: string): boolean {
+  return (
+    pathname === appRoutes.employerLogin ||
+    pathname === appRoutes.employerRegister
+  );
+}
+
+function isAdminAuthPath(pathname: string): boolean {
+  return pathname === appRoutes.adminLogin || pathname === "/forgot-password";
 }
 
 export async function proxy(request: NextRequest) {
@@ -17,34 +34,71 @@ export async function proxy(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   });
 
-  const isAdminRoute = pathname.startsWith("/admin");
   const isAuthenticated = Boolean(token?.accessToken);
-  const isAdmin =
-    token?.user?.role === userRole.ADMIN ||
-    (token?.user as { role?: string } | undefined)?.role === "admin";
+  const role = normalizeRole(
+    (token?.user as { role?: string } | undefined)?.role,
+  );
 
-  if (isAuthPath(pathname) && isAuthenticated && isAdmin) {
+  if (pathname === appRoutes.home) {
+    if (isAuthenticated) {
+      return NextResponse.redirect(
+        new URL(getRedirectUrlForRole(role), request.url),
+      );
+    }
+    return NextResponse.next();
+  }
+
+  if (isAuthenticated && isPublicAuthPath(pathname)) {
     return NextResponse.redirect(
-      new URL(appRoutes.adminDashboard, request.url),
+      new URL(getRedirectUrlForRole(role), request.url),
     );
   }
 
-  if (isAdminRoute && !isAuthPath(pathname)) {
+  if (pathname.startsWith("/admin")) {
+    if (isAdminAuthPath(pathname)) {
+      return NextResponse.next();
+    }
     if (!isAuthenticated) {
       return NextResponse.redirect(new URL(appRoutes.adminLogin, request.url));
     }
-    if (!isAdmin) {
-      return NextResponse.redirect(new URL(appRoutes.adminLogin, request.url));
-    }
-  }
-
-  if (pathname === "/") {
-    if (isAuthenticated && isAdmin) {
+    if (role !== userRole.ADMIN && role !== "admin") {
       return NextResponse.redirect(
-        new URL(appRoutes.adminDashboard, request.url),
+        new URL(getRedirectUrlForRole(role), request.url),
       );
     }
-    return NextResponse.redirect(new URL(appRoutes.adminLogin, request.url));
+    return NextResponse.next();
+  }
+
+  if (pathname.startsWith("/user")) {
+    if (isUserAuthPath(pathname)) {
+      return NextResponse.next();
+    }
+    if (!isAuthenticated) {
+      return NextResponse.redirect(new URL(appRoutes.userLogin, request.url));
+    }
+    if (role !== userRole.USER && role !== "user") {
+      return NextResponse.redirect(
+        new URL(getLoginUrlForRole(role), request.url),
+      );
+    }
+    return NextResponse.next();
+  }
+
+  if (pathname.startsWith("/employer")) {
+    if (isEmployerAuthPath(pathname)) {
+      return NextResponse.next();
+    }
+    if (!isAuthenticated) {
+      return NextResponse.redirect(
+        new URL(appRoutes.employerLogin, request.url),
+      );
+    }
+    if (role !== userRole.EMPLOYER && role !== "employer") {
+      return NextResponse.redirect(
+        new URL(getLoginUrlForRole(role), request.url),
+      );
+    }
+    return NextResponse.next();
   }
 
   return NextResponse.next();
