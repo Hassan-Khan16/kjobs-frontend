@@ -4,7 +4,11 @@ import { appRoutes } from "@/utils/endpoint";
 
 export default function UserRegisterPage() {
   return (
-    <AuthLayout logoHref={appRoutes.home}>
+    <AuthLayout
+      logoHref={appRoutes.home}
+      backHref={appRoutes.userLogin}
+      backLabel="Back to sign in"
+    >
       <UserRegister />
     </AuthLayout>
   );

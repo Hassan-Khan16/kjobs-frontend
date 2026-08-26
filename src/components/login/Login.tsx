@@ -229,15 +229,6 @@ const Login = ({
     </div>
   );
 
-  if (isAdmin) {
-    return (
-      <>
-        <AuthHeroBackground />
-        {card}
-      </>
-    );
-  }
-
   return card;
 };
 

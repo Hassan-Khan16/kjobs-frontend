@@ -5,7 +5,7 @@ import { userRole } from "@/enum/role";
 
 export default function UserLoginPage() {
   return (
-    <AuthLayout logoHref={appRoutes.home}>
+    <AuthLayout logoHref={appRoutes.home} backHref={appRoutes.home} backLabel="Back to home">
       <Login
         providerId="user-credentials"
         allowedRole={userRole.USER}

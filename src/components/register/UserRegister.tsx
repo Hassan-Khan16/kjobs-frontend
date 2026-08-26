@@ -18,8 +18,9 @@ import {
 } from "@/schemas/auth";
 import { registerUser } from "@/services/auth-service";
 import { handleOpenToast } from "@/helper/toast";
+import { authHeroCardClass } from "@/components/login/Login";
+import { cn } from "@/lib/utils";
 import { appRoutes } from "@/utils/endpoint";
-import { userRole } from "@/enum/role";
 
 export default function UserRegister() {
   const router = useRouter();
@@ -78,20 +79,19 @@ export default function UserRegister() {
   };
 
   return (
-    <div className="max-w-[520px] w-full rounded-[20px] border border-gray-105 bg-background py-[35px] px-[30px] sm:px-[38px] shadow-sm">
-      <Heading variant="h4" className="text-foreground">
-        Create your account
-      </Heading>
-      <Text variant="p4" className="mt-1 text-muted-foreground">
-        Register as a job seeker
-      </Text>
+    <div className={cn(authHeroCardClass, "max-w-[520px]")}>
+      <div className="mt-0 lg:mt-5">
+        <Heading variant="h4">Create your account</Heading>
+        <Text variant="p5" className="mt-1">
+          Register as a job seeker
+        </Text>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-4 mt-6 flex flex-col w-full"
+        className="space-y-4 mt-[26px] flex flex-col w-full"
       >
         <div className="space-y-1">
-          <Label variant="form" htmlFor="name" required>
+          <Label variant="l1" htmlFor="name" required>
             Full Name
           </Label>
           <Controller
@@ -102,7 +102,7 @@ export default function UserRegister() {
                 {...field}
                 id="name"
                 placeholder="Your full name"
-                variant="outline3"
+                variant="whitebg"
                 error={!!errors.name}
                 errorMessage={errors.name?.message}
               />
@@ -111,7 +111,7 @@ export default function UserRegister() {
         </div>
 
         <div className="space-y-1">
-          <Label variant="form" htmlFor="email" required>
+          <Label variant="l1" htmlFor="email" required>
             Email
           </Label>
           <Controller
@@ -123,7 +123,7 @@ export default function UserRegister() {
                 id="email"
                 type="email"
                 placeholder="you@example.com"
-                variant="outline3"
+                variant="whitebg"
                 error={!!errors.email}
                 errorMessage={errors.email?.message}
               />
@@ -132,7 +132,7 @@ export default function UserRegister() {
         </div>
 
         <div className="space-y-1">
-          <Label variant="form" htmlFor="password" required>
+          <Label variant="l1" htmlFor="password" required>
             Password
           </Label>
           <Controller
@@ -143,7 +143,7 @@ export default function UserRegister() {
                 {...field}
                 id="password"
                 placeholder="At least 8 characters"
-                variant="outline3"
+                variant="whitebg"
                 error={!!errors.password}
                 errorMessage={errors.password?.message}
               />
@@ -152,7 +152,7 @@ export default function UserRegister() {
         </div>
 
         <div className="space-y-1">
-          <Label variant="form" htmlFor="confirmPassword" required>
+          <Label variant="l1" htmlFor="confirmPassword" required>
             Confirm Password
           </Label>
           <Controller
@@ -163,7 +163,7 @@ export default function UserRegister() {
                 {...field}
                 id="confirmPassword"
                 placeholder="Confirm password"
-                variant="outline3"
+                variant="whitebg"
                 error={!!errors.confirmPassword}
                 errorMessage={errors.confirmPassword?.message}
               />
@@ -171,20 +171,27 @@ export default function UserRegister() {
           />
         </div>
 
-        <Button type="submit" disabled={loading} loading={loading} className="w-full">
+        <Button
+          type="submit"
+          disabled={loading}
+          loading={loading}
+          className="w-full"
+          variant="gradientCurved"
+        >
           Create Account
         </Button>
 
-        <p className="text-sm text-center text-muted-foreground">
+        <p className="text-sm text-center text-background mt-2">
           Already have an account?{" "}
           <Link
             href={appRoutes.userLogin}
-            className="text-brand-royal font-medium hover:underline"
+            className="font-medium underline-offset-4 hover:underline text-background"
           >
             Sign in
           </Link>
         </p>
       </form>
+      </div>
     </div>
   );
 }

@@ -5,7 +5,11 @@ import { userRole } from "@/enum/role";
 
 export default function AdminLoginPage() {
   return (
-    <AuthLayout logoHref={appRoutes.adminLogin}>
+    <AuthLayout
+      logoHref={appRoutes.home}
+      backHref={appRoutes.home}
+      backLabel="Back to home"
+    >
       <Login
         providerId="admin-credentials"
         allowedRole={userRole.ADMIN}
