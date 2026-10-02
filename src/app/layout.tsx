@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Poppins } from "next/font/google";
+import { Anton, Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
@@ -7,8 +7,8 @@ import AuthProvider from "@/components/provider/AuthProvider";
 import NextTopLoader from "nextjs-toploader";
 
 export const metadata: Metadata = {
-  title: "KJobs Admin",
-  description: "KJobs admin panel",
+  title: "KJobs",
+  description: "Find your next opportunity. The modern job platform for job seekers and employers.",
 };
 
 export const viewport: Viewport = {
@@ -28,6 +28,12 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
+const anton = Anton({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-anton",
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -36,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="light">
       <body
-        className={`${poppins.variable} ${inter.variable} antialiased font-inter`}
+        className={`${poppins.variable} ${inter.variable} ${anton.variable} antialiased font-inter`}
       >
         <AuthProvider>
           <ThemeProvider

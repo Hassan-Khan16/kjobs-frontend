@@ -13,10 +13,9 @@ function getLogoutCallbackUrl(role: string | undefined): string {
       return appRoutes.adminLogin;
     case userRole.EMPLOYER:
     case "employer":
-      return appRoutes.employerLogin;
     case userRole.USER:
     case "user":
-      return appRoutes.userLogin;
+      return appRoutes.login;
     default:
       return appRoutes.home;
   }

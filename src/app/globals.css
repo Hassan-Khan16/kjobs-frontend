@@ -23,10 +23,18 @@ body {
 }
 
 .font-anton {
-  font-family: var(--font-anton);
+  font-family: var(--font-anton), sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-anton), sans-serif;
 }
 
 .font-poppins {
+  font-family: var(--font-poppins), sans-serif;
+}
+
+.font-ui {
   font-family: var(--font-poppins), sans-serif;
 }
 
@@ -42,10 +50,22 @@ body {
 
   /* Brand */
   --color-brand-navy: var(--brand-navy);
+  --color-brand-navy-2: var(--brand-navy-secondary);
   --color-brand-navy-secondary: var(--brand-navy-secondary);
   --color-brand-royal: var(--brand-royal);
   --color-brand-sky: var(--brand-sky);
   --color-brand-indigo: var(--brand-indigo);
+
+  /* Public / marketing surfaces */
+  --color-surface: var(--surface-page);
+  --color-surface-muted: #f1f5f9;
+  --color-surface-accent: #e8eef9;
+  --color-surface-info: #e0edff;
+  --color-text-primary: var(--brand-navy);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-support: #475569;
+  --color-border-default: var(--border-default);
+  --color-border-light: #d1d5db;
 
   /* Semantic (shadcn) */
   --color-background: var(--background);

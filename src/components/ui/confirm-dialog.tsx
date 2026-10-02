@@ -30,7 +30,7 @@ export interface ConfirmDialogProps {
   cancelLabel?: string;
   onConfirm: () => void | Promise<void>;
   variant?: NonNullable<
-    VariantProps<typeof buttonVariants>["variant"] | "restore" | "nla-delete"
+    VariantProps<typeof buttonVariants>["variant"] | "restore" | "danger"
   >;
   loading?: boolean;
   className?: string;
@@ -76,13 +76,13 @@ const ConfirmDialog = ({
           <DialogHeader
             className={cn(
               "p-5 rounded-t-[16px]",
-              variant === "nla-delete"
+              variant === "danger"
                 ? "bg-white border-b border-gray-105 p-6"
                 : "bg-sky-blue-20",
             )}
           >
             <div className="flex gap-2 items-center ">
-              {variant === "nla-delete" ? null : variant ===
+              {variant === "danger" ? null : variant ===
                 "destructive" ? (
                 <CircleAlert className="size-5 text-destructive" />
               ) : variant === "restore" ? (
@@ -93,7 +93,7 @@ const ConfirmDialog = ({
               <DialogTitle
                 className={cn(
                   "text-left text-[20px] text-black-10 font-inter",
-                  variant === "nla-delete" ? "font-semibold" : "font-[700]",
+                  variant === "danger" ? "font-semibold" : "font-[700]",
                 )}
               >
                 {title}
@@ -104,7 +104,7 @@ const ConfirmDialog = ({
           <DialogDescription
             className={cn(
               "p-5 pb-2 text-left text-[16px] font-[400] font-inter text-dark-gray-2",
-              variant === "nla-delete" ? "p-6 pt-6 mt-0" : "mt-5 pt-1",
+              variant === "danger" ? "p-6 pt-6 mt-0" : "mt-5 pt-1",
             )}
           >
             {description}
@@ -114,7 +114,7 @@ const ConfirmDialog = ({
         <DialogFooter
           className={cn(
             "flex flex-row py-5 px-4 justify-end gap-2 pt-4 sm:justify-end",
-            variant === "nla-delete"
+            variant === "danger"
               ? "bg-white p-6"
               : "bg-gray-102 rounded-b-[20px]",
           )}
@@ -126,7 +126,7 @@ const ConfirmDialog = ({
             disabled={busy}
             className={cn(
               "rounded-lg bg-background text-foreground-104 border-gray-20",
-              variant === "nla-delete" &&
+              variant === "danger" &&
                 "rounded-[10px] h-10 px-4 border-gray-105 text-black-10",
             )}
           >
@@ -138,10 +138,16 @@ const ConfirmDialog = ({
             disabled={busy}
             className={cn(
               "rounded-lg font-inter font-[500] text-[14px] ",
-              variant === "nla-delete" &&
+              variant === "danger" &&
                 "rounded-[10px] h-10 px-6",
             )}
-            variant={variant === "nla-delete" ? "destructive" : variant}
+            variant={
+              variant === "danger"
+                ? "destructive"
+                : variant === "restore"
+                  ? "default"
+                  : variant
+            }
           >
             {busy ? (
               <>
