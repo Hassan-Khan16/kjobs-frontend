@@ -47,9 +47,21 @@ export function PublicNavbar({ dark = false }: { dark?: boolean }) {
     setMenuOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [menuOpen]);
+
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
-  const baseDark = dark && !scrolled;
+  const baseDark = dark && !scrolled && !menuOpen;
+  const solid = scrolled || menuOpen;
+  const menuTextColor = dark ? "rgba(255,255,255,0.85)" : "#475569";
+  const menuDivider = dark ? "rgba(255,255,255,0.1)" : "#E5E7EB";
 
   return (
     <nav
@@ -57,21 +69,21 @@ export function PublicNavbar({ dark = false }: { dark?: boolean }) {
       style={{
         background: baseDark
           ? "transparent"
-          : scrolled && dark
+          : solid && dark
             ? "rgba(25,28,51,0.97)"
             : "rgba(255,255,255,0.97)",
-        backdropFilter: scrolled ? "blur(16px)" : "none",
-        borderBottom: scrolled
+        backdropFilter: solid ? "blur(16px)" : "none",
+        borderBottom: solid
           ? dark
             ? "1px solid rgba(255,255,255,0.1)"
             : "1px solid #E5E7EB"
           : "none",
-        boxShadow: scrolled ? "0 4px 24px rgba(0,0,0,0.12)" : "none",
+        boxShadow: solid ? "0 4px 24px rgba(0,0,0,0.12)" : "none",
       }}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between md:h-20">
-          <BrandMark variant={baseDark || (scrolled && dark) ? "light" : "dark"} />
+          <BrandMark variant={dark ? "light" : "dark"} />
 
           <div className="hidden items-center gap-8 md:flex">
             {navLinks.map((link) => (
@@ -139,24 +151,33 @@ export function PublicNavbar({ dark = false }: { dark?: boolean }) {
 
           <button
             type="button"
-            className="rounded-lg p-2 md:hidden"
+            className="relative h-10 w-10 rounded-lg md:hidden"
             onClick={() => setMenuOpen((open) => !open)}
-            aria-label="Toggle menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
           >
-            <div className="flex flex-col gap-1.5">
-              {[0, 1, 2].map((item) => (
-                <span
-                  key={item}
-                  className="block h-0.5 w-6 rounded"
-                  style={{ background: baseDark ? "#FFFFFF" : "#191C33" }}
-                />
-              ))}
-            </div>
+            {[-45, 0, 45].map((rotation, index) => (
+              <span
+                key={rotation}
+                className="absolute left-1/2 block h-0.5 w-6 rounded transition-all duration-200"
+                style={{
+                  background: dark ? "#FFFFFF" : "#191C33",
+                  top: menuOpen ? "50%" : `calc(50% + ${(index - 1) * 7}px)`,
+                  transform: menuOpen
+                    ? `translateX(-50%) rotate(${rotation}deg)`
+                    : "translateX(-50%)",
+                  opacity: menuOpen && rotation === 0 ? 0 : 1,
+                }}
+              />
+            ))}
           </button>
         </div>
 
         {menuOpen ? (
-          <div className="border-t border-white/10 py-4 md:hidden">
+          <div
+            className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t pt-3 pb-5 md:hidden"
+            style={{ borderColor: menuDivider }}
+          >
             <div className="flex flex-col gap-1">
               {navLinks.map((link) => (
                 <Link
@@ -164,40 +185,49 @@ export function PublicNavbar({ dark = false }: { dark?: boolean }) {
                   href={link.href}
                   className="font-ui rounded-lg px-4 py-3 text-sm font-medium"
                   style={{
-                    color: isActive(link.href)
-                      ? "#2F5BDE"
-                      : baseDark
-                        ? "rgba(255,255,255,0.85)"
-                        : "#475569",
+                    color: isActive(link.href) ? "#2F5BDE" : menuTextColor,
                     background: isActive(link.href) ? "rgba(47,91,222,0.1)" : "transparent",
                   }}
                 >
                   {link.label}
                 </Link>
               ))}
-              <div className="mt-3 flex flex-col gap-2 border-t border-white/10 pt-3">
+              <div className="mt-3 flex flex-col gap-2 border-t pt-4" style={{ borderColor: menuDivider }}>
                 {isAuthenticated ? (
                   <>
-                    <Link href={dashboardHref} className="font-ui px-4 py-3 text-center text-sm font-medium text-text-support">
+                    <Link
+                      href={dashboardHref}
+                      className="font-ui rounded-lg border px-4 py-3 text-center text-sm font-medium"
+                      style={{ color: menuTextColor, borderColor: menuDivider }}
+                    >
                       Dashboard
                     </Link>
                     <button
                       type="button"
                       onClick={() => logoutClient(session?.user?.role)}
-                      className="font-ui px-4 py-3 text-center text-sm font-medium text-text-support"
+                      className="font-ui rounded-lg border px-4 py-3 text-center text-sm font-medium"
+                      style={{ color: menuTextColor, borderColor: menuDivider }}
                     >
                       Log out
                     </button>
                   </>
                 ) : (
-                  <>
-                    <Link href={appRoutes.login} className="font-ui px-4 py-3 text-center text-sm font-medium text-text-support">
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link
+                      href={appRoutes.login}
+                      className="font-ui rounded-lg border px-4 py-3 text-center text-sm font-medium"
+                      style={{ color: menuTextColor, borderColor: menuDivider }}
+                    >
                       Login
                     </Link>
-                    <Link href={appRoutes.register} className="font-ui px-4 py-3 text-center text-sm font-medium text-text-support">
+                    <Link
+                      href={appRoutes.register}
+                      className="font-ui rounded-lg border px-4 py-3 text-center text-sm font-medium"
+                      style={{ color: menuTextColor, borderColor: menuDivider }}
+                    >
                       Register
                     </Link>
-                  </>
+                  </div>
                 )}
                 <Link
                   href={postJobHref}
