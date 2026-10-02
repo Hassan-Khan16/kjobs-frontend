@@ -45,8 +45,11 @@ export async function authorizeCredentials(
     throw new Error("These credentials do not match this login page.");
   }
 
+  const mappedUser = mapApiUser(user);
+
   return {
-    user: mapApiUser(user),
+    id: mappedUser.id,
+    user: mappedUser,
     token: { accessToken: token },
   };
 }

@@ -11,10 +11,6 @@ interface LabelProps extends React.ComponentProps<typeof LabelPrimitive.Root> {
     | "form"
     | "formCheckbox"
     | "modalForm"
-    | "activityForm"
-    | "schoolForm"
-    | "nlaForm"
-    | "quizForm"
     | "l1"
     | "l2"
     | "l3"
@@ -46,13 +42,6 @@ function Label({
     l7: "text-[13px] lg:text-[13px] font-inter mb-1 font-medium text-foreground-20",
     modalForm: "text-[15px] font-inter mb-1 font-light text-foreground-104",
     formCheckbox: "text-[13px] font-inter mb-1 font-normal text-gray-60",
-    activityForm:
-      "text-[15px] lg:text-[13px] font-inter mb-1 font-semibold text-foreground-10",
-    schoolForm:
-      "text-[12px] lg:text-[13px] font-inter mb-1 font-[500] text-foreground-20",
-    nlaForm:
-      "text-[15px] font-inter mb-1 font-medium text-foreground-20",
-      quizForm:"font-inter font-[500] text-[12px] lg:text-[14px] text-foreground-20"
   };
 
   return (
