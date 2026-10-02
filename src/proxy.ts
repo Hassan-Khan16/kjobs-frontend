@@ -11,9 +11,7 @@ import {
 } from "@/helper/auth";
 
 function isUserAuthPath(pathname: string): boolean {
-  return (
-    pathname === appRoutes.userLogin || pathname === appRoutes.userRegister
-  );
+  return pathname === appRoutes.userLogin || pathname === appRoutes.userRegister;
 }
 
 function isEmployerAuthPath(pathname: string): boolean {
@@ -74,7 +72,9 @@ export async function proxy(request: NextRequest) {
       return NextResponse.next();
     }
     if (!isAuthenticated) {
-      return NextResponse.redirect(new URL(appRoutes.userLogin, request.url));
+      return NextResponse.redirect(
+        new URL(`${appRoutes.login}?role=job-seeker`, request.url),
+      );
     }
     if (role !== userRole.USER && role !== "user") {
       return NextResponse.redirect(
@@ -84,13 +84,13 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (pathname.startsWith("/employer")) {
+  if (pathname === "/employer" || pathname.startsWith("/employer/")) {
     if (isEmployerAuthPath(pathname)) {
       return NextResponse.next();
     }
     if (!isAuthenticated) {
       return NextResponse.redirect(
-        new URL(appRoutes.employerLogin, request.url),
+        new URL(`${appRoutes.login}?role=employer`, request.url),
       );
     }
     if (role !== userRole.EMPLOYER && role !== "employer") {

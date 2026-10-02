@@ -30,10 +30,10 @@ export function getLoginUrlForRole(role: string | undefined): string {
       return appRoutes.adminLogin;
     case userRole.EMPLOYER:
     case "employer":
-      return appRoutes.employerLogin;
+      return `${appRoutes.login}?role=employer`;
     case userRole.USER:
     case "user":
-      return appRoutes.userLogin;
+      return `${appRoutes.login}?role=job-seeker`;
     default:
       return appRoutes.home;
   }
@@ -41,11 +41,14 @@ export function getLoginUrlForRole(role: string | undefined): string {
 
 export const PUBLIC_AUTH_PATHS = [
   appRoutes.adminLogin,
+  appRoutes.login,
+  appRoutes.register,
   appRoutes.userLogin,
   appRoutes.userRegister,
   appRoutes.employerLogin,
   appRoutes.employerRegister,
-  "/forgot-password",
+  appRoutes.forgotPassword,
+  appRoutes.resetPassword,
 ] as const;
 
 export function isPublicAuthPath(pathname: string): boolean {

@@ -1,11 +1,6 @@
-import EmployerRegister from "@/components/register/EmployerRegister";
-import { AuthLayout } from "../../layout";
+import { redirect } from "next/navigation";
 import { appRoutes } from "@/utils/endpoint";
 
-export default function EmployerRegisterPage() {
-  return (
-    <AuthLayout logoHref={appRoutes.home}>
-      <EmployerRegister />
-    </AuthLayout>
-  );
+export default function EmployerRegisterRedirect() {
+  redirect(`${appRoutes.register}?role=employer`);
 }

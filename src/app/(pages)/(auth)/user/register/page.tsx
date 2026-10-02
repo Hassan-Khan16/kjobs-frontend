@@ -1,11 +1,6 @@
-import UserRegister from "@/components/register/UserRegister";
-import { AuthLayout } from "../../layout";
+import { redirect } from "next/navigation";
 import { appRoutes } from "@/utils/endpoint";
 
-export default function UserRegisterPage() {
-  return (
-    <AuthLayout logoHref={appRoutes.home}>
-      <UserRegister />
-    </AuthLayout>
-  );
+export default function UserRegisterRedirect() {
+  redirect(`${appRoutes.register}?role=job-seeker`);
 }
