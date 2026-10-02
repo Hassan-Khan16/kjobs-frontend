@@ -50,11 +50,11 @@ export function PublicLoginForm({ initialRole = "job-seeker" }: { initialRole?: 
   };
 
   return (
-    <section className="relative min-h-[760px] overflow-hidden bg-brand-navy pt-28 pb-20 md:pt-36 md:pb-28">
+    <section className="relative min-h-[760px] overflow-hidden bg-brand-navy pt-18 pb-10 md:pt-28 md:pb-8">
       <div className="absolute top-28 -left-24 h-72 w-72 rounded-full bg-brand-royal/20 blur-3xl" />
       <div className="absolute -right-24 bottom-16 h-80 w-80 rounded-full bg-brand-sky/10 blur-3xl" />
-      <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1fr_520px] lg:px-8">
-        <div className="hidden max-w-xl lg:block">
+      <div className="relative mx-auto grid max-w-7xl items-start gap-14 px-4 sm:px-6 lg:grid-cols-[1fr_520px] lg:px-8">
+        <div className="hidden max-w-xl pt-12 lg:block">
           <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-brand-sky/25 bg-brand-royal/15 px-4 py-2 font-ui text-xs font-medium text-brand-sky">
             <span className="h-1.5 w-1.5 rounded-full bg-brand-sky" />
             Your next move starts here

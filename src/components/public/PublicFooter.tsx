@@ -58,11 +58,11 @@ function SocialIcon({ name }: { name: "twitter" | "linkedin" | "github" | "faceb
 export function PublicFooter() {
   return (
     <footer className="bg-brand-navy text-white">
-      <div className="mx-auto max-w-7xl px-4 pt-16 pb-8 sm:px-6 lg:px-8">
-        <div className="mb-12 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
-          <div>
+      <div className="mx-auto max-w-7xl px-4 pt-12 pb-8 sm:px-6 sm:pt-16 lg:px-8">
+        <div className="mb-10 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 sm:gap-8 lg:mb-12 lg:grid-cols-4 lg:gap-12">
+          <div className="col-span-2 sm:col-span-3 lg:col-span-1">
             <BrandMark variant="light" className="mb-4" />
-            <p className="mb-6 text-sm leading-relaxed text-white/60">
+            <p className="mb-6 max-w-sm text-sm leading-relaxed text-white/60">
               Connecting talent with opportunity. The modern job platform built for job seekers and employers alike.
             </p>
             <div className="flex gap-3">
@@ -80,8 +80,8 @@ export function PublicFooter() {
           </div>
           {columns.map((column) => (
             <div key={column.title}>
-              <h4 className="mb-5 font-ui text-sm font-semibold text-brand-sky">{column.title}</h4>
-              <ul className="space-y-3">
+              <h4 className="mb-4 font-ui text-sm font-semibold text-brand-sky sm:mb-5">{column.title}</h4>
+              <ul className="space-y-2.5 sm:space-y-3">
                 {column.links.map((link) => (
                   <li key={link.label}>
                     <Link href={link.href} className="text-sm text-white/60 transition-colors hover:text-white">
@@ -93,9 +93,9 @@ export function PublicFooter() {
             </div>
           ))}
         </div>
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-sm text-white/40 sm:flex-row">
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-center text-xs text-white/40 sm:flex-row sm:pt-8 sm:text-left sm:text-sm">
           <span>© 2026 KJobs. All rights reserved.</span>
-          <div className="flex gap-6">
+          <div className="flex gap-5 sm:gap-6">
             <span>Privacy Policy</span>
             <span>Terms of Service</span>
           </div>

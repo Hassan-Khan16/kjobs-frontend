@@ -76,7 +76,7 @@ export function PublicRegisterForm({ initialRole = "job-seeker" }: { initialRole
   };
 
   return (
-    <section className="relative overflow-hidden bg-brand-navy pt-28 pb-20 md:pt-36 md:pb-28">
+    <section className="relative overflow-hidden bg-brand-navy pt-18 pb-10 md:pt-28 md:pb-8">
       <div className="absolute bottom-20 -left-20 h-80 w-80 rounded-full bg-brand-indigo/15 blur-3xl" />
       <div className="absolute top-24 -right-20 h-96 w-96 rounded-full bg-brand-sky/10 blur-3xl" />
       <div className="relative mx-auto grid max-w-7xl items-start gap-14 px-4 sm:px-6 lg:grid-cols-[1fr_560px] lg:px-8">
