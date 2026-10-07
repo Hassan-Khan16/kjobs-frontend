@@ -15,7 +15,7 @@ export type AdminSidebarNavItem = {
 
 export const adminSidebarNav: AdminSidebarNavItem[] = [
   { title: "Dashboard", url: "/admin/dashboard", icon: LayoutDashboard },
-  { title: "Users", url: "/admin/users", icon: Users },
+  { title: "Job Seekers", url: "/admin/job-seekers", icon: Users },
   { title: "Employers", url: "/admin/employers", icon: Building2 },
   { title: "Job Listings", url: "/admin/job-listings", icon: Briefcase },
   { title: "Applications", url: "/admin/applications", icon: FileText },

@@ -48,14 +48,17 @@ export interface CreateEmployerPayload {
 
 export type UpdateEmployerPayload = {
   email?: string;
-  password?: string;
-  password_confirmation?: string;
   company_name?: string;
   contact_person_name?: string;
   phone?: string;
   company_description?: string;
   website?: string;
   logo?: string;
+};
+
+export type UpdateEmployerPasswordPayload = {
+  password: string;
+  password_confirmation: string;
 };
 
 export type EmployerListResponse = {

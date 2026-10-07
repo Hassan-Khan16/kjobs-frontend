@@ -75,7 +75,7 @@ export default function AdminUserFormContainer({ mode, initial }: Props) {
         return;
       }
       handleOpenToast("User updated successfully", "success");
-      router.push(`/admin/users/${initial.id}`);
+      router.push(`/admin/job-seekers/${initial.id}`);
       return;
     }
 
@@ -85,7 +85,7 @@ export default function AdminUserFormContainer({ mode, initial }: Props) {
       return;
     }
     handleOpenToast("User created successfully", "success");
-    router.push("/admin/users");
+    router.push("/admin/job-seekers");
   };
 
   return (

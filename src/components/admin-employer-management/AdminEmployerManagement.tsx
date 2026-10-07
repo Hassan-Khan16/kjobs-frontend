@@ -9,15 +9,14 @@ import {
   DEFAULT_TABLE_STATUS_FILTER_OPTIONS,
 } from "@/components/table-search-filter-header/TableSearchFilterHeader";
 import ConfirmDialog from "@/components/ui/confirm-dialog";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AdminTableIconActions } from "@/components/admin-table-icon-actions/AdminTableIconActions";
 import { StatusBadge } from "@/components/status-badge/StatusBadge";
+import AdminEmployerDetailsModal from "@/components/admin-employer-management/AdminEmployerDetailsModal";
 import { useDebounce } from "@/hooks/use-debounce";
 import { PAGE_SIZE, API_UNAVAILABLE_MESSAGE } from "@/constants";
 import { getEmployers, patchEmployerStatus, getEmployer, deleteEmployer } from "@/services/employer-service";
 import type { AdminEmployerListItem, AdminEmployer } from "@/types/employer";
 import { handleOpenToast } from "@/helper/toast";
-import { AdminHeaderActionButton } from "@/components/admin-page-header/AdminHeaderActionButton";
 
 export default function AdminEmployerManagement() {
   const router = useRouter();
@@ -32,6 +31,7 @@ export default function AdminEmployerManagement() {
     React.useState<AdminEmployerListItem | null>(null);
   const [statusLoading, setStatusLoading] = React.useState(false);
   const [viewEmployer, setViewEmployer] = React.useState<AdminEmployer | null>(null);
+  const [viewDialogOpen, setViewDialogOpen] = React.useState(false);
   const [viewLoading, setViewLoading] = React.useState(false);
   const [deleteTarget, setDeleteTarget] =
     React.useState<AdminEmployerListItem | null>(null);
@@ -77,12 +77,15 @@ export default function AdminEmployerManagement() {
         <AdminTableIconActions
           status={row.original.status}
           onView={async () => {
+            setViewEmployer(null);
+            setViewDialogOpen(true);
             setViewLoading(true);
             const res = await getEmployer(row.original.id);
             setViewLoading(false);
             if (res.success) {
               setViewEmployer(res.data);
             } else {
+              setViewDialogOpen(false);
               handleOpenToast(res.message || API_UNAVAILABLE_MESSAGE, "error");
             }
           }}
@@ -174,7 +177,7 @@ export default function AdminEmployerManagement() {
         }
         description={
           statusTarget
-            ? `Are you sure you want to ${statusTarget.status === "active" ? "deactivate" : "activate"} ${statusTarget.companyName}?`
+            ? `Are you sure you want to ${statusTarget.status === "active" ? "deactivate" : "activate"} ${statusTarget.company_name}?`
             : ""
         }
         onConfirm={confirmStatus}
@@ -186,76 +189,21 @@ export default function AdminEmployerManagement() {
         title="Delete employer?"
         description={
           deleteTarget
-            ? `Are you sure you want to delete ${deleteTarget.companyName}? This action cannot be undone.`
+            ? `Are you sure you want to delete ${deleteTarget.company_name}? This action cannot be undone.`
             : ""
         }
         onConfirm={confirmDelete}
         loading={deleteLoading}
       />
-      <Dialog open={!!viewEmployer} onOpenChange={(open) => !open && setViewEmployer(null)}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Employer Details</DialogTitle>
-          </DialogHeader>
-          {viewLoading ? (
-            <div className="py-8 text-center text-sm text-gray-500">Loading...</div>
-          ) : viewEmployer ? (
-            <div className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <dt className="text-sm text-gray-500">Company Name</dt>
-                  <dd className="font-medium">{viewEmployer.companyName}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-gray-500">Contact Person</dt>
-                  <dd className="font-medium">{viewEmployer.contactPersonName}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-gray-500">Email</dt>
-                  <dd className="font-medium">{viewEmployer.user.email}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-gray-500">Phone</dt>
-                  <dd className="font-medium">{viewEmployer.phone || "—"}</dd>
-                </div>
-                <div className="col-span-2">
-                  <dt className="text-sm text-gray-500">Company Description</dt>
-                  <dd className="font-medium">{viewEmployer.companyDescription || "—"}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-gray-500">Website</dt>
-                  <dd className="font-medium">
-                    {viewEmployer.website ? (
-                      <a href={viewEmployer.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                        {viewEmployer.website}
-                      </a>
-                    ) : "—"}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-gray-500">Status</dt>
-                  <dd className="mt-1">
-                    <StatusBadge status={viewEmployer.user.isActive ? "active" : "inactive"} />
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-gray-500">Created</dt>
-                  <dd className="font-medium">{viewEmployer.createdAt || "—"}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-gray-500">Updated</dt>
-                  <dd className="font-medium">{viewEmployer.updatedAt || "—"}</dd>
-                </div>
-              </div>
-              <div className="flex justify-end gap-2 pt-4">
-                <AdminHeaderActionButton href={`/admin/employers/${viewEmployer.id}/edit`}>
-                  Edit Employer
-                </AdminHeaderActionButton>
-              </div>
-            </div>
-          ) : null}
-        </DialogContent>
-      </Dialog>
+      <AdminEmployerDetailsModal
+        open={viewDialogOpen}
+        onOpenChange={(open) => {
+          setViewDialogOpen(open);
+          if (!open) setViewEmployer(null);
+        }}
+        loading={viewLoading}
+        employer={viewEmployer}
+      />
     </div>
   );
 }

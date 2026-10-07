@@ -11,7 +11,7 @@ export default function AdminEmployerDetailContainer({
   return (
     <div>
       <AdminPageHeader
-        title={employer.companyName}
+        title={employer.company_name}
         subtitle={employer.user.email}
         action={
           <AdminHeaderActionButton
@@ -21,43 +21,43 @@ export default function AdminEmployerDetailContainer({
           </AdminHeaderActionButton>
         }
       />
-      <dl className="grid gap-4 max-w-2xl rounded-[10px] border border-gray-105 bg-background p-6">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
+      <dl className="grid max-w-3xl gap-4 rounded-lg border border-gray-200 bg-background p-4 shadow-sm sm:p-6">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
+          <div className="min-w-0">
             <dt className="text-sm text-gray-500">Contact Person</dt>
-            <dd className="font-medium">{employer.contactPersonName}</dd>
+            <dd className="break-words font-medium">{employer.contact_person_name}</dd>
           </div>
-          <div>
+          <div className="min-w-0">
             <dt className="text-sm text-gray-500">Phone</dt>
             <dd className="font-medium">{employer.phone || "—"}</dd>
           </div>
-          <div className="col-span-2">
+          <div className="min-w-0 sm:col-span-2">
             <dt className="text-sm text-gray-500">Company Description</dt>
-            <dd className="font-medium">{employer.companyDescription || "—"}</dd>
+            <dd className="whitespace-pre-wrap break-words font-medium">{employer.company_description || "—"}</dd>
           </div>
-          <div>
+          <div className="min-w-0">
             <dt className="text-sm text-gray-500">Website</dt>
             <dd className="font-medium">
               {employer.website ? (
-                <a href={employer.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                <a href={employer.website} target="_blank" rel="noopener noreferrer" className="break-all text-blue-600 hover:underline">
                   {employer.website}
                 </a>
               ) : "—"}
             </dd>
           </div>
-          <div>
+          <div className="min-w-0">
             <dt className="text-sm text-gray-500">Status</dt>
             <dd className="mt-1">
-              <StatusBadge status={employer.user.isActive ? "active" : "inactive"} />
+              <StatusBadge status={employer.user.is_active ? "active" : "inactive"} />
             </dd>
           </div>
-          <div>
+          <div className="min-w-0">
             <dt className="text-sm text-gray-500">Created</dt>
-            <dd className="font-medium">{employer.createdAt || "—"}</dd>
+            <dd className="break-words font-medium">{employer.created_at || "—"}</dd>
           </div>
-          <div>
+          <div className="min-w-0">
             <dt className="text-sm text-gray-500">Updated</dt>
-            <dd className="font-medium">{employer.updatedAt || "—"}</dd>
+            <dd className="break-words font-medium">{employer.updated_at || "—"}</dd>
           </div>
         </div>
       </dl>

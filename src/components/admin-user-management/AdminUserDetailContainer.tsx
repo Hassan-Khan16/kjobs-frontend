@@ -13,7 +13,7 @@ export default function AdminUserDetailContainer({ user }: { user: AdminUser }) 
         title={user.name}
         subtitle={user.email}
         action={
-          <AdminHeaderActionButton href={`/admin/users/${user.id}/edit`}>
+          <AdminHeaderActionButton href={`/admin/job-seekers/${user.id}/edit`}>
             Edit User
           </AdminHeaderActionButton>
         }

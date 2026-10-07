@@ -6,11 +6,11 @@ export default function AdminUsersPage() {
   return (
     <div>
       <AdminPageHeader
-        title="Users Management"
+        title="Job Seekers Management"
         subtitle="Manage job seekers and their accounts"
         action={
-          <AdminHeaderActionButton href="/admin/users/create">
-            Create User
+          <AdminHeaderActionButton href="/admin/job-seekers/create">
+            Create Job Seeker
           </AdminHeaderActionButton>
         }
       />

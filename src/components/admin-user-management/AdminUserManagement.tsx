@@ -78,7 +78,7 @@ export default function AdminUserManagement() {
             handleOpenToast(res.message || API_UNAVAILABLE_MESSAGE, "error");
           }
         },
-        onEdit: (row) => router.push(`/admin/users/${row.id}/edit`),
+        onEdit: (row) => router.push(`/admin/job-seekers/${row.id}/edit`),
         onToggleStatus: (row) => setStatusTarget(row),
       }),
     [router],
@@ -188,7 +188,7 @@ export default function AdminUserManagement() {
                 </div>
               </div>
               <div className="flex justify-end gap-2 pt-4">
-                <AdminHeaderActionButton href={`/admin/users/${viewUser.id}/edit`}>
+                <AdminHeaderActionButton href={`/admin/job-seekers/${viewUser.id}/edit`}>
                   Edit User
                 </AdminHeaderActionButton>
               </div>

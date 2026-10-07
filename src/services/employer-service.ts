@@ -7,6 +7,7 @@ import type {
   AdminEmployerListItem,
   CreateEmployerPayload,
   UpdateEmployerPayload,
+  UpdateEmployerPasswordPayload,
   EmployerListResponse,
 } from "@/types/employer";
 
@@ -87,6 +88,14 @@ export async function updateEmployer(id: string, payload: UpdateEmployerPayload)
   const res = await put<AdminEmployer, UpdateEmployerPayload>(endpoint, payload);
   if (!res.success) return res;
   return { success: true as const, message: res.message, data: res.data };
+}
+
+export async function updateEmployerPassword(
+  id: string,
+  payload: UpdateEmployerPasswordPayload,
+) {
+  const endpoint = replacePathParams(apiEndpoint.adminEmployerPassword, { id });
+  return patch<UpdateEmployerPasswordPayload, null>(endpoint, payload);
 }
 
 export async function deleteEmployer(id: string) {

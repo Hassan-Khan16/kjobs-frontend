@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, type FieldErrors } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,13 +14,24 @@ import { cn } from "@/lib/utils";
 import {
   createEmployerSchema,
   updateEmployerSchema,
+  updateEmployerPasswordSchema,
   type CreateEmployerFormData,
   type UpdateEmployerFormData,
+  type UpdateEmployerPasswordFormData,
 } from "@/schemas/employer";
-import { createEmployer, updateEmployer } from "@/services/employer-service";
+import {
+  createEmployer,
+  updateEmployer,
+  updateEmployerPassword,
+} from "@/services/employer-service";
 import { handleOpenToast } from "@/helper/toast";
 import { API_UNAVAILABLE_MESSAGE } from "@/constants";
 import type { AdminEmployer } from "@/types/employer";
+import type {
+  CreateEmployerPayload,
+  UpdateEmployerPayload,
+  UpdateEmployerPasswordPayload,
+} from "@/types/employer";
 
 type Props = { mode: "create" | "edit"; initial?: AdminEmployer };
 
@@ -32,12 +43,10 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
     defaultValues: isEdit
       ? {
           email: initial?.user.email ?? "",
-          password: "",
-          password_confirmation: "",
-          companyName: initial?.companyName ?? "",
-          contactPersonName: initial?.contactPersonName ?? "",
+          companyName: initial?.company_name ?? "",
+          contactPersonName: initial?.contact_person_name ?? "",
           phone: initial?.phone ?? "",
-          companyDescription: initial?.companyDescription ?? "",
+          companyDescription: initial?.company_description ?? "",
           website: initial?.website ?? "",
           logo: initial?.logo ?? "",
         }
@@ -53,30 +62,36 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
           logo: "",
         },
   });
+  const passwordForm = useForm<UpdateEmployerPasswordFormData>({
+    resolver: zodResolver(updateEmployerPasswordSchema),
+    defaultValues: { password: "", password_confirmation: "" },
+  });
 
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = form;
+  const createErrors = errors as FieldErrors<CreateEmployerFormData>;
+  const {
+    control: passwordControl,
+    handleSubmit: handlePasswordSubmit,
+    formState: { errors: passwordErrors, isSubmitting: isPasswordSubmitting },
+  } = passwordForm;
 
   const onSubmit = async (
     data: CreateEmployerFormData | UpdateEmployerFormData,
   ) => {
     if (isEdit && initial) {
-      const payload: any = {
-        companyName: data.companyName,
-        contactPersonName: data.contactPersonName,
+      const payload: UpdateEmployerPayload = {
+        company_name: data.companyName,
+        contact_person_name: data.contactPersonName,
         phone: data.phone,
-        companyDescription: data.companyDescription,
+        company_description: data.companyDescription,
         website: data.website,
         logo: data.logo,
       };
       if (data.email) payload.email = data.email;
-      if (data.password) {
-        payload.password = data.password;
-        payload.password_confirmation = data.password_confirmation;
-      }
 
       const res = await updateEmployer(initial.id, payload);
       if (!res.success) {
@@ -87,7 +102,19 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
       router.push(`/admin/employers/${initial.id}`);
       return;
     }
-    const res = await createEmployer(data as CreateEmployerFormData);
+    const createData = data as CreateEmployerFormData;
+    const payload: CreateEmployerPayload = {
+      email: createData.email,
+      password: createData.password,
+      password_confirmation: createData.password_confirmation,
+      company_name: createData.companyName,
+      contact_person_name: createData.contactPersonName,
+      phone: createData.phone,
+      company_description: createData.companyDescription,
+      website: createData.website,
+      logo: createData.logo,
+    };
+    const res = await createEmployer(payload);
     if (!res.success) {
       handleOpenToast(res.message || API_UNAVAILABLE_MESSAGE, "error");
       return;
@@ -96,18 +123,33 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
     router.push("/admin/employers");
   };
 
+  const onPasswordSubmit = async (data: UpdateEmployerPasswordFormData) => {
+    if (!initial) return;
+    const payload: UpdateEmployerPasswordPayload = {
+      password: data.password,
+      password_confirmation: data.password_confirmation,
+    };
+    const res = await updateEmployerPassword(initial.id, payload);
+    if (!res.success) {
+      handleOpenToast(res.message || API_UNAVAILABLE_MESSAGE, "error");
+      return;
+    }
+    passwordForm.reset();
+    handleOpenToast("Employer password updated", "success");
+  };
+
   return (
-    <div>
+    <div className="p-4 lg:p-6">
       <AdminPageHeader
         title={isEdit ? "Edit Employer" : "Create Employer"}
         subtitle={isEdit ? "Update employer account details" : "Add a new employer account"}
       />
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-6 max-w-2xl space-y-4 rounded-[10px] border border-gray-105 bg-background p-6"
+        className="mt-6 max-w-3xl space-y-6 rounded-lg border border-gray-200 bg-background p-4 shadow-sm sm:p-6"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-1">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <div className="space-y-2">
             <Label required>Company Name</Label>
             <Controller
               name="companyName"
@@ -121,7 +163,7 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
               )}
             />
           </div>
-          <div className="space-y-1">
+          <div className="space-y-2">
             <Label required>Contact Person Name</Label>
             <Controller
               name="contactPersonName"
@@ -137,8 +179,8 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-1">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <div className="space-y-2">
             <Label required>Email</Label>
             <Controller
               name="email"
@@ -153,7 +195,7 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
               )}
             />
           </div>
-          <div className="space-y-1">
+          <div className="space-y-2">
             <Label>Phone</Label>
             <Controller
               name="phone"
@@ -171,8 +213,8 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
         </div>
 
         {!isEdit && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-1">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            <div className="space-y-2">
               <Label required>Password</Label>
               <Controller
                 name="password"
@@ -180,13 +222,13 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
                 render={({ field }) => (
                   <PasswordInput
                     {...field}
-                    error={!!errors.password}
-                    errorMessage={errors.password?.message}
+                    error={!!createErrors.password}
+                    errorMessage={createErrors.password?.message}
                   />
                 )}
               />
             </div>
-            <div className="space-y-1">
+            <div className="space-y-2">
               <Label required>Confirm Password</Label>
               <Controller
                 name="password_confirmation"
@@ -194,8 +236,8 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
                 render={({ field }) => (
                   <PasswordInput
                     {...field}
-                    error={!!errors.password_confirmation}
-                    errorMessage={errors.password_confirmation?.message}
+                    error={!!createErrors.password_confirmation}
+                    errorMessage={createErrors.password_confirmation?.message}
                   />
                 )}
               />
@@ -203,40 +245,7 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
           </div>
         )}
 
-        {isEdit && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <Label>Password {isEdit && "(leave blank to keep current)"}</Label>
-              <Controller
-                name="password"
-                control={control}
-                render={({ field }) => (
-                  <PasswordInput
-                    {...field}
-                    error={!!errors.password}
-                    errorMessage={errors.password?.message}
-                  />
-                )}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label>Confirm Password</Label>
-              <Controller
-                name="password_confirmation"
-                control={control}
-                render={({ field }) => (
-                  <PasswordInput
-                    {...field}
-                    error={!!errors.password_confirmation}
-                    errorMessage={errors.password_confirmation?.message}
-                  />
-                )}
-              />
-            </div>
-          </div>
-        )}
-
-        <div className="space-y-1">
+        <div className="space-y-2">
           <Label>Company Description</Label>
           <Controller
             name="companyDescription"
@@ -253,8 +262,8 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-1">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <div className="space-y-2">
             <Label>Website</Label>
             <Controller
               name="website"
@@ -270,7 +279,7 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
               )}
             />
           </div>
-          <div className="space-y-1">
+          <div className="space-y-2">
             <Label>Logo URL</Label>
             <Controller
               name="logo"
@@ -288,20 +297,73 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
           </div>
         </div>
 
-        <div className="flex gap-3 pt-2">
+        <div className="flex flex-col-reverse gap-3 border-t border-gray-200 pt-5 sm:flex-row sm:justify-end">
           <Button
             type="submit"
             loading={isSubmitting}
             size="sm"
-            className={cn(adminHeaderActionButtonClassName, "w-auto")}
+            className={cn(adminHeaderActionButtonClassName, "w-full sm:w-auto")}
           >
             {isEdit ? "Save Changes" : "Create Employer"}
           </Button>
-          <Button type="button" variant="outline" onClick={() => router.back()}>
+          <Button type="button" variant="outline" onClick={() => router.back()} className="w-full sm:w-auto">
             Cancel
           </Button>
         </div>
       </form>
+      {isEdit && initial && (
+        <form
+          onSubmit={handlePasswordSubmit(onPasswordSubmit)}
+          className="mt-5 max-w-3xl space-y-5 rounded-lg border border-gray-200 bg-background p-4 shadow-sm sm:p-6"
+        >
+          <div>
+            <h2 className="text-base font-semibold">Change Password</h2>
+            <p className="mt-1 text-sm text-gray-500">
+              Set a new password for this employer account.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label required>New Password</Label>
+              <Controller
+                name="password"
+                control={passwordControl}
+                render={({ field }) => (
+                  <PasswordInput
+                    {...field}
+                    error={!!passwordErrors.password}
+                    errorMessage={passwordErrors.password?.message}
+                  />
+                )}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label required>Confirm New Password</Label>
+              <Controller
+                name="password_confirmation"
+                control={passwordControl}
+                render={({ field }) => (
+                  <PasswordInput
+                    {...field}
+                    error={!!passwordErrors.password_confirmation}
+                    errorMessage={passwordErrors.password_confirmation?.message}
+                  />
+                )}
+              />
+            </div>
+          </div>
+          <div className="flex justify-end border-t border-gray-200 pt-5">
+            <Button
+              type="submit"
+              loading={isPasswordSubmitting}
+              size="sm"
+              className={cn(adminHeaderActionButtonClassName, "w-full sm:w-auto")}
+            >
+              Update Password
+            </Button>
+          </div>
+        </form>
+      )}
     </div>
   );
 }
