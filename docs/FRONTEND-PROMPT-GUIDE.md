@@ -2,9 +2,11 @@
 
 Copy this into future prompts when asking the agent to change the KJobs user-facing website.
 
+Product behavior, Laravel routes, and which screens are mocked: `docs/CONTEXT.md`.
+
 ## Always include
 
-1. Read `FRONTEND-STANDARDS.md` first.
+1. Read `FRONTEND-STANDARDS.md` and `docs/CONTEXT.md` first.
 2. Inspect the existing file before editing.
 3. Keep the admin panel untouched.
 4. Keep Tailwind. Do not add Bootstrap or another UI framework.

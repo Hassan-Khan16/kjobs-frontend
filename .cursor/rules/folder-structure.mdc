@@ -1,5 +1,5 @@
 ---
-description: KJobs frontend folder structure (aligned with Wellsnax)
+description: KJobs frontend folder structure
 globs: src/**/*
 alwaysApply: true
 ---
@@ -8,11 +8,13 @@ alwaysApply: true
 
 Place code by **responsibility**, not file size. **`lib/` is not a catch-all** â€” reserve it for integrations and app infrastructure.
 
+Product behavior (real auth vs mocked jobs) is in `docs/CONTEXT.md`. Do not treat `helper/meal.ts`, `helper/school.ts`, `helper/subscription*.ts`, `helper/course-module.ts`, or `helper/billing-invoice.ts` as KJobs code.
+
 | Folder | Put here |
 |--------|----------|
 | `app/` | Next.js routes, layouts, page wiring |
 | `components/` | React UI; feature subfolders |
-| `services/` | API calls (`*-service.ts`) via `fetch/` + `utils/endpoint.ts` |
+| `services/` | `*-service.ts` only. Auth hits Laravel. Public jobs, seekers, saved jobs, applications, employer portal, and contact are mocked here |
 | `fetch/` | Shared HTTP client |
 | `types/` | TypeScript types/interfaces |
 | `schemas/` | Zod schemas + validation |
@@ -23,4 +25,4 @@ Place code by **responsibility**, not file size. **`lib/` is not a catch-all** â
 | `lib/` | NextAuth, `cn()`, form glue |
 | `hooks/` | Shared React hooks |
 | `store/` | Zustand slices |
-| `data/` | Static nav / seed data |
+| `data/` | Static catalogs (`public-jobs`, `public-seekers`, admin nav). Not a second API layer |

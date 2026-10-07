@@ -1,0 +1,32 @@
+---
+description: KJobs product context — roles, what is real vs mocked, and where not to edit
+alwaysApply: true
+---
+
+# KJobs context
+
+Read `docs/CONTEXT.md` before changing behavior. Visual rules are in `FRONTEND-STANDARDS.md`.
+
+Two apps: `kjobs-backend` (Laravel 12, Sanctum, SQLite) and this Next.js 16 app.
+
+Roles on `users.role`: `user` (job seeker), `employer`, `admin`. Each login endpoint rejects the other roles. Inactive users get 403.
+
+Auth is real: NextAuth credentials → Laravel → Sanctum bearer token on the JWT (`accessToken`). Providers: `user-credentials`, `employer-credentials`, `admin-credentials`. Public screens are `/login` and `/register`. `/user/login` and `/employer/login` redirect there.
+
+`src/proxy.ts` guards `/admin`, `/user`, and `/employer`. Do not add `middleware.ts`.
+
+Only these Laravel routes exist: role register/login, legacy `/register` and `/login`, `/auth/me`, `/auth/logout`, `/admin/login`, `/admin/me`, `/admin/logout`, `GET /admin/users`. Admin employer, job, application, and dashboard endpoints are called by the frontend and are not implemented. Do not invent them unless asked.
+
+Mocked behind services (do not hardcode in JSX; keep signatures when replacing):
+
+- `public-job-service`, `public-seeker-service` — static data
+- `saved-jobs-service`, `user-application-service`, `employer-portal-service` — `localStorage` keys prefixed `kjobs.`
+- `contact-service` — fake success
+
+Backend application statuses are `applied | reviewing | shortlisted | rejected | hired`. Frontend enums still say `pending | reviewed`. Job listings also have `draft`. Map them; do not rename one side quietly.
+
+`EmployerProfile::jobs()` points at a missing `Job` model. Listings are `JobListing`.
+
+Leave `src/app/(pages)/admin/**` and `src/components/admin-*` alone unless the task is admin. Tailwind only. Shared `src/components/ui` primitives are used by admin.
+
+Ignore leftover template files (`meal`, `school`, `subscription*`, `course-module`, `billing-invoice`, WellSnax images).
