@@ -69,11 +69,15 @@ export async function getUsers(params: {
   };
 }
 
-export async function getUserById(id: string) {
+export async function getUser(id: string) {
   const endpoint = replacePathParams(apiEndpoint.adminUserById, { id });
   const res = await get<ApiUserRaw>(endpoint);
   if (!res.success) return res;
   return { success: true as const, message: res.message, data: mapApiUser(res.data) };
+}
+
+export async function getUserById(id: string) {
+  return getUser(id);
 }
 
 export async function createUser(payload: CreateUserPayload) {

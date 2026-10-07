@@ -4,28 +4,54 @@ const passwordSchema = z
   .string()
   .min(8, "Password must be at least 8 characters");
 
-export const createEmployerSchema = z.object({
-  companyName: z.string().trim().min(1, "Company name is required"),
-  contactName: z.string().trim().min(1, "Contact name is required"),
+export const createEmployerSchema = z
+  .object({
+    email: z
+      .string()
+      .min(1, "Email is required")
+      .email("Invalid email address")
+      .trim(),
+    password: passwordSchema,
+    password_confirmation: z.string().min(1, "Password confirmation is required"),
+    companyName: z.string().trim().min(1, "Company name is required"),
+    contactPersonName: z.string().trim().min(1, "Contact person name is required"),
+    phone: z.string().optional(),
+    companyDescription: z.string().optional(),
+    website: z.string().url("Invalid URL").optional().or(z.literal("")),
+    logo: z.string().optional(),
+  })
+  .refine((data) => data.password === data.password_confirmation, {
+    message: "Passwords do not match",
+    path: ["password_confirmation"],
+  });
+
+export const updateEmployerSchema = z.object({
   email: z
     .string()
     .min(1, "Email is required")
     .email("Invalid email address")
-    .trim(),
+    .trim()
+    .optional(),
+  password: passwordSchema.optional(),
+  password_confirmation: z.string().optional(),
+  companyName: z.string().trim().min(1, "Company name is required").optional(),
+  contactPersonName: z.string().trim().min(1, "Contact person name is required").optional(),
   phone: z.string().optional(),
-  password: passwordSchema,
-});
-
-export const updateEmployerSchema = createEmployerSchema
-  .omit({ password: true })
-  .extend({
-    password: z
-      .string()
-      .optional()
-      .refine((val) => !val || passwordSchema.safeParse(val).success, {
-        message: "Password must be at least 8 characters",
-      }),
-  });
+  companyDescription: z.string().optional(),
+  website: z.string().url("Invalid URL").optional().or(z.literal("")),
+  logo: z.string().optional(),
+}).refine(
+  (data) => {
+    if (data.password || data.password_confirmation) {
+      return data.password === data.password_confirmation;
+    }
+    return true;
+  },
+  {
+    message: "Passwords do not match",
+    path: ["password_confirmation"],
+  }
+);
 
 export type CreateEmployerFormData = z.infer<typeof createEmployerSchema>;
 export type UpdateEmployerFormData = z.infer<typeof updateEmployerSchema>;

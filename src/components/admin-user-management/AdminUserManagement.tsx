@@ -8,13 +8,17 @@ import {
   DEFAULT_TABLE_STATUS_FILTER_OPTIONS,
 } from "@/components/table-search-filter-header/TableSearchFilterHeader";
 import ConfirmDialog from "@/components/ui/confirm-dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useDebounce } from "@/hooks/use-debounce";
 import { PAGE_SIZE } from "@/constants";
-import { getUsers, patchUserStatus } from "@/services/user-service";
-import type { AdminUserListItem } from "@/types/user";
+import { getUsers, patchUserStatus, getUser } from "@/services/user-service";
+import type { AdminUserListItem, AdminUser } from "@/types/user";
 import { buildUserColumns } from "./AdminUserManagementTable";
 import { handleOpenToast } from "@/helper/toast";
 import { API_UNAVAILABLE_MESSAGE } from "@/constants";
+import { StatusBadge } from "@/components/status-badge/StatusBadge";
+import { formatUserRole } from "@/helper/user";
+import { AdminHeaderActionButton } from "@/components/admin-page-header/AdminHeaderActionButton";
 
 export default function AdminUserManagement() {
   const router = useRouter();
@@ -28,6 +32,8 @@ export default function AdminUserManagement() {
   const [statusTarget, setStatusTarget] =
     React.useState<AdminUserListItem | null>(null);
   const [statusLoading, setStatusLoading] = React.useState(false);
+  const [viewUser, setViewUser] = React.useState<AdminUser | null>(null);
+  const [viewLoading, setViewLoading] = React.useState(false);
 
   const debouncedSearch = useDebounce(search, 500);
 
@@ -62,7 +68,16 @@ export default function AdminUserManagement() {
   const columns = React.useMemo(
     () =>
       buildUserColumns({
-        onView: (row) => router.push(`/admin/users/${row.id}`),
+        onView: async (row) => {
+          setViewLoading(true);
+          const res = await getUser(row.id);
+          setViewLoading(false);
+          if (res.success) {
+            setViewUser(res.data);
+          } else {
+            handleOpenToast(res.message || API_UNAVAILABLE_MESSAGE, "error");
+          }
+        },
         onEdit: (row) => router.push(`/admin/users/${row.id}/edit`),
         onToggleStatus: (row) => setStatusTarget(row),
       }),
@@ -72,8 +87,7 @@ export default function AdminUserManagement() {
   const confirmStatus = async () => {
     if (!statusTarget) return;
     setStatusLoading(true);
-    const next =
-      statusTarget.status === "active" ? "inactive" : ("active" as const);
+    const next = statusTarget.status === "active" ? "inactive" : ("active" as const);
     const res = await patchUserStatus(statusTarget.id, next);
     setStatusLoading(false);
     if (!res.success) {
@@ -136,6 +150,52 @@ export default function AdminUserManagement() {
         onConfirm={confirmStatus}
         loading={statusLoading}
       />
+      <Dialog open={!!viewUser} onOpenChange={(open) => !open && setViewUser(null)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>User Details</DialogTitle>
+          </DialogHeader>
+          {viewLoading ? (
+            <div className="py-8 text-center text-sm text-gray-500">Loading...</div>
+          ) : viewUser ? (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <dt className="text-sm text-gray-500">Name</dt>
+                  <dd className="font-medium">{viewUser.name}</dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-gray-500">Email</dt>
+                  <dd className="font-medium">{viewUser.email}</dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-gray-500">Role</dt>
+                  <dd className="font-medium">{formatUserRole(viewUser.role)}</dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-gray-500">Status</dt>
+                  <dd className="mt-1">
+                    <StatusBadge status={viewUser.isActive ? "active" : "inactive"} />
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-gray-500">Created</dt>
+                  <dd className="font-medium">{viewUser.createdAt || "—"}</dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-gray-500">Updated</dt>
+                  <dd className="font-medium">{viewUser.updatedAt || "—"}</dd>
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 pt-4">
+                <AdminHeaderActionButton href={`/admin/users/${viewUser.id}/edit`}>
+                  Edit User
+                </AdminHeaderActionButton>
+              </div>
+            </div>
+          ) : null}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

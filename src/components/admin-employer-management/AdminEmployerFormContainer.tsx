@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/custom/PasswordInput";
+import { Textarea } from "@/components/ui/textarea";
 import AdminPageHeader from "@/components/admin-page-header/AdminPageHeader";
 import { adminHeaderActionButtonClassName } from "@/components/admin-page-header/AdminHeaderActionButton";
 import { cn } from "@/lib/utils";
@@ -30,18 +31,26 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
     resolver: zodResolver(isEdit ? updateEmployerSchema : createEmployerSchema),
     defaultValues: isEdit
       ? {
-          companyName: initial?.companyName ?? "",
-          contactName: initial?.contactName ?? "",
-          email: initial?.email ?? "",
-          phone: initial?.phone ?? "",
+          email: initial?.user.email ?? "",
           password: "",
+          password_confirmation: "",
+          companyName: initial?.companyName ?? "",
+          contactPersonName: initial?.contactPersonName ?? "",
+          phone: initial?.phone ?? "",
+          companyDescription: initial?.companyDescription ?? "",
+          website: initial?.website ?? "",
+          logo: initial?.logo ?? "",
         }
       : {
-          companyName: "",
-          contactName: "",
           email: "",
-          phone: "",
           password: "",
+          password_confirmation: "",
+          companyName: "",
+          contactPersonName: "",
+          phone: "",
+          companyDescription: "",
+          website: "",
+          logo: "",
         },
   });
 
@@ -55,13 +64,21 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
     data: CreateEmployerFormData | UpdateEmployerFormData,
   ) => {
     if (isEdit && initial) {
-      const res = await updateEmployer(initial.id, {
+      const payload: any = {
         companyName: data.companyName,
-        contactName: data.contactName,
-        email: data.email,
+        contactPersonName: data.contactPersonName,
         phone: data.phone,
-        ...(data.password ? { password: data.password } : {}),
-      });
+        companyDescription: data.companyDescription,
+        website: data.website,
+        logo: data.logo,
+      };
+      if (data.email) payload.email = data.email;
+      if (data.password) {
+        payload.password = data.password;
+        payload.password_confirmation = data.password_confirmation;
+      }
+
+      const res = await updateEmployer(initial.id, payload);
       if (!res.success) {
         handleOpenToast(res.message || API_UNAVAILABLE_MESSAGE, "error");
         return;
@@ -83,51 +100,195 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
     <div>
       <AdminPageHeader
         title={isEdit ? "Edit Employer" : "Create Employer"}
-        subtitle="Employer account details"
+        subtitle={isEdit ? "Update employer account details" : "Add a new employer account"}
       />
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-6 max-w-xl space-y-4 rounded-[10px] border border-gray-105 bg-background p-6"
+        className="mt-6 max-w-2xl space-y-4 rounded-[10px] border border-gray-105 bg-background p-6"
       >
-        {(
-          [
-            ["companyName", "Company Name", false],
-            ["contactName", "Contact Name", false],
-            ["email", "Email", false],
-            ["phone", "Phone", false],
-          ] as const
-        ).map(([name, label]) => (
-          <div key={name} className="space-y-1">
-            <Label required={name !== "phone"}>{label}</Label>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <Label required>Company Name</Label>
             <Controller
-              name={name}
+              name="companyName"
               control={control}
               render={({ field }) => (
                 <Input
                   {...field}
-                  type={name === "email" ? "email" : "text"}
-                  error={!!errors[name]}
-                  errorMessage={errors[name]?.message as string}
+                  error={!!errors.companyName}
+                  errorMessage={errors.companyName?.message as string}
                 />
               )}
             />
           </div>
-        ))}
+          <div className="space-y-1">
+            <Label required>Contact Person Name</Label>
+            <Controller
+              name="contactPersonName"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  error={!!errors.contactPersonName}
+                  errorMessage={errors.contactPersonName?.message as string}
+                />
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <Label required>Email</Label>
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type="email"
+                  error={!!errors.email}
+                  errorMessage={errors.email?.message as string}
+                />
+              )}
+            />
+          </div>
+          <div className="space-y-1">
+            <Label>Phone</Label>
+            <Controller
+              name="phone"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type="tel"
+                  error={!!errors.phone}
+                  errorMessage={errors.phone?.message as string}
+                />
+              )}
+            />
+          </div>
+        </div>
+
+        {!isEdit && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <Label required>Password</Label>
+              <Controller
+                name="password"
+                control={control}
+                render={({ field }) => (
+                  <PasswordInput
+                    {...field}
+                    error={!!errors.password}
+                    errorMessage={errors.password?.message}
+                  />
+                )}
+              />
+            </div>
+            <div className="space-y-1">
+              <Label required>Confirm Password</Label>
+              <Controller
+                name="password_confirmation"
+                control={control}
+                render={({ field }) => (
+                  <PasswordInput
+                    {...field}
+                    error={!!errors.password_confirmation}
+                    errorMessage={errors.password_confirmation?.message}
+                  />
+                )}
+              />
+            </div>
+          </div>
+        )}
+
+        {isEdit && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <Label>Password {isEdit && "(leave blank to keep current)"}</Label>
+              <Controller
+                name="password"
+                control={control}
+                render={({ field }) => (
+                  <PasswordInput
+                    {...field}
+                    error={!!errors.password}
+                    errorMessage={errors.password?.message}
+                  />
+                )}
+              />
+            </div>
+            <div className="space-y-1">
+              <Label>Confirm Password</Label>
+              <Controller
+                name="password_confirmation"
+                control={control}
+                render={({ field }) => (
+                  <PasswordInput
+                    {...field}
+                    error={!!errors.password_confirmation}
+                    errorMessage={errors.password_confirmation?.message}
+                  />
+                )}
+              />
+            </div>
+          </div>
+        )}
+
         <div className="space-y-1">
-          <Label required={!isEdit}>Password</Label>
+          <Label>Company Description</Label>
           <Controller
-            name="password"
+            name="companyDescription"
             control={control}
             render={({ field }) => (
-              <PasswordInput
+              <Textarea
                 {...field}
-                error={!!errors.password}
-                errorMessage={errors.password?.message}
+                rows={4}
+                error={!!errors.companyDescription}
+                errorMessage={errors.companyDescription?.message as string}
+                placeholder="Enter company description..."
               />
             )}
           />
         </div>
-        <div className="flex gap-3">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <Label>Website</Label>
+            <Controller
+              name="website"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type="url"
+                  placeholder="https://example.com"
+                  error={!!errors.website}
+                  errorMessage={errors.website?.message as string}
+                />
+              )}
+            />
+          </div>
+          <div className="space-y-1">
+            <Label>Logo URL</Label>
+            <Controller
+              name="logo"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type="url"
+                  placeholder="https://example.com/logo.png"
+                  error={!!errors.logo}
+                  errorMessage={errors.logo?.message as string}
+                />
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-3 pt-2">
           <Button
             type="submit"
             loading={isSubmitting}

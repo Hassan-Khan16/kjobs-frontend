@@ -1,6 +1,6 @@
 # KJobs context snapshot
 
-Snapshot date: 7 October 2026. This is the frontend copy of the repo-root `CONTEXT.md`. Visual rules stay in `FRONTEND-STANDARDS.md`. Prompt constraints stay in `docs/FRONTEND-PROMPT-GUIDE.md`.
+Snapshot date: 7 October 2026. Use this file first when opening the repo in a new IDE.
 
 KJobs is a job platform with three roles: **job seeker** (`user`), **employer**, and **admin**. The repo is two apps:
 
@@ -34,7 +34,7 @@ npm run dev
 
 `.env.example`:
 
-```
+```env
 NEXT_PUBLIC_BACKEND_URL=http://127.0.0.1:8000
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=change-me-in-production
@@ -44,7 +44,7 @@ Seeded admin (password is hashed by the User model cast): `admin@kjobs.com` / `P
 
 ## Business model
 
-```
+```text
 users (role: admin | employer | user, is_active)
   └── employer_profiles (1:1, only for employers)
         └── job_listings
@@ -149,7 +149,7 @@ Frontend:
 - Route and API path constants live in `src/utils/endpoint.ts`. Build URLs with `replacePathParams`. Do not hardcode `/api/...` in components.
 - Server talk goes through `src/fetch/fetch.ts` (`get`, `post`, `put`, `patch`) and a function in `src/services/*`. Components do not call `fetch` directly.
 - Mocked features keep the same `{ success, message, data }` shape and `delay()` so a later swap to HTTP does not change the page.
-- Portal data is per user when a `userId` is passed (`kjobs.user-applications.<id>`, `kjobs.saved-jobs.<id>`). Employer portal keys are `kjobs.employer-jobs` and `kjobs.employer-applications`.
+- Portal data is per user when a `userId` is passed (`kjobs.user-applications.<id>`).
 - Public pages use explicit brand hexes (`#191C33`, `#2F5BDE`, `#64748B`, `#475569`, `#F8FAFC`, `#E5E7EB`, `#E0EDFF`) because some Tailwind token utilities (`text-text-secondary`, `bg-surface-info`) were missing from the compiled CSS during the design pass.
 - Admin UI is a separate shell (`AdminSidebar`, shadcn `Sidebar`). Seeker and employer portals use `PortalSidebar` (hidden below `lg`) plus `PortalMobileNav`.
 - Toasts go through `handleOpenToast` (`sonner`).
@@ -158,7 +158,7 @@ Frontend:
 
 - `EmployerProfile::jobs()` points at `App\Models\Job`, which does not exist. The model is `JobListing`.
 - Frontend `applicationStatus` uses `pending` / `reviewed`. The database uses `applied` / `reviewing`. Frontend `jobListingStatus` omits `draft`.
-- `src/helper/meal.ts`, `school.ts`, `subscription.ts`, `subscription-display.ts`, `subscription-history-mapper.ts`, `course-module.ts`, `billing-invoice.ts`, and `src/types/school.ts` are leftovers from another product. They are unused by KJobs and some import missing modules. Same for WellSnax images under `public/images`.
+- `src/helper/meal.ts`, `school.ts`, `subscription.ts`, `subscription-display.ts`, `subscription-history-mapper.ts`, `course-module.ts`, `billing-invoice.ts`, and `src/types/school.ts` are leftovers from another product. They are unused by KJobs and some import missing modules. Same for WellSnax images under `kjobs-frontend/public/images`.
 - `GET /api/admin/users` filters `role = user` and then optionally filters `role` again, so an employer/admin role query returns nothing.
 - `src/proxy.ts` allows `/forgot-password` through the admin branch via `isAdminAuthPath`, but that page is public, not an admin page.
 

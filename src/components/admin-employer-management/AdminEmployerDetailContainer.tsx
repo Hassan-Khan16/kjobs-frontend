@@ -12,7 +12,7 @@ export default function AdminEmployerDetailContainer({
     <div>
       <AdminPageHeader
         title={employer.companyName}
-        subtitle={employer.email}
+        subtitle={employer.user.email}
         action={
           <AdminHeaderActionButton
             href={`/admin/employers/${employer.id}/edit`}
@@ -21,20 +21,44 @@ export default function AdminEmployerDetailContainer({
           </AdminHeaderActionButton>
         }
       />
-      <dl className="grid gap-4 max-w-xl rounded-[10px] border border-gray-105 bg-background p-6">
-        <div>
-          <dt className="text-sm text-gray-116">Contact</dt>
-          <dd>{employer.contactName}</dd>
-        </div>
-        <div>
-          <dt className="text-sm text-gray-116">Phone</dt>
-          <dd>{employer.phone || "—"}</dd>
-        </div>
-        <div>
-          <dt className="text-sm text-gray-116">Status</dt>
-          <dd className="mt-1">
-            <StatusBadge status={employer.isActive ? "active" : "inactive"} />
-          </dd>
+      <dl className="grid gap-4 max-w-2xl rounded-[10px] border border-gray-105 bg-background p-6">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <dt className="text-sm text-gray-500">Contact Person</dt>
+            <dd className="font-medium">{employer.contactPersonName}</dd>
+          </div>
+          <div>
+            <dt className="text-sm text-gray-500">Phone</dt>
+            <dd className="font-medium">{employer.phone || "—"}</dd>
+          </div>
+          <div className="col-span-2">
+            <dt className="text-sm text-gray-500">Company Description</dt>
+            <dd className="font-medium">{employer.companyDescription || "—"}</dd>
+          </div>
+          <div>
+            <dt className="text-sm text-gray-500">Website</dt>
+            <dd className="font-medium">
+              {employer.website ? (
+                <a href={employer.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                  {employer.website}
+                </a>
+              ) : "—"}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-sm text-gray-500">Status</dt>
+            <dd className="mt-1">
+              <StatusBadge status={employer.user.isActive ? "active" : "inactive"} />
+            </dd>
+          </div>
+          <div>
+            <dt className="text-sm text-gray-500">Created</dt>
+            <dd className="font-medium">{employer.createdAt || "—"}</dd>
+          </div>
+          <div>
+            <dt className="text-sm text-gray-500">Updated</dt>
+            <dd className="font-medium">{employer.updatedAt || "—"}</dd>
+          </div>
         </div>
       </dl>
     </div>
