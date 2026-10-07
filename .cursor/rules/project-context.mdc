@@ -7,26 +7,30 @@ alwaysApply: true
 
 Read `docs/CONTEXT.md` before changing behavior. Visual rules are in `FRONTEND-STANDARDS.md`.
 
-Two apps: `kjobs-backend` (Laravel 12, Sanctum, SQLite) and this Next.js 16 app.
+Two apps: `kjobs-backend` (Laravel 12, Sanctum, SQLite) and this Next.js 16 app. Roles: `user` (seeker), `employer`, `admin`. Inactive users get 403. Register requires `password_confirmation`. Employer register creates the user and `employer_profiles` in one transaction; `users.name` is the contact person.
 
-Roles on `users.role`: `user` (job seeker), `employer`, `admin`. Each login endpoint rejects the other roles. Inactive users get 403.
+Auth is real: NextAuth (`user-credentials`, `employer-credentials`, `admin-credentials`) → Laravel → Sanctum bearer on the JWT (`accessToken`). Public screens are `/login` and `/register`. Legacy `/api/register` and `/api/login` exist but this app does not call them. `/user/login` and `/employer/login` redirect to the public forms.
 
-Auth is real: NextAuth credentials → Laravel → Sanctum bearer token on the JWT (`accessToken`). Providers: `user-credentials`, `employer-credentials`, `admin-credentials`. Public screens are `/login` and `/register`. `/user/login` and `/employer/login` redirect there.
+`src/proxy.ts` gates `/admin`, `/user`, and `/employer`. Do not add `middleware.ts`.
 
-`src/proxy.ts` guards `/admin`, `/user`, and `/employer`. Do not add `middleware.ts`.
+Laravel routes that exist: role register/login, legacy register/login, `/auth/me`, `/auth/logout`, `/admin/login`, `/admin/me`, `/admin/logout`, `GET /admin/users`. No job, application, employer-admin, or dashboard-stats routes. Do not invent them unless asked. Admin screens that call the missing paths already show an unavailable-API message.
 
-Only these Laravel routes exist: role register/login, legacy `/register` and `/login`, `/auth/me`, `/auth/logout`, `/admin/login`, `/admin/me`, `/admin/logout`, `GET /admin/users`. Admin employer, job, application, and dashboard endpoints are called by the frontend and are not implemented. Do not invent them unless asked.
+Components do not call `fetch`. Use `src/utils/endpoint.ts`, `src/fetch/fetch.ts`, and `src/services/*`. Keep mock signatures (`{ success, message, data }` plus `delay()`).
 
-Mocked behind services (do not hardcode in JSX; keep signatures when replacing):
+Mocked (do not hardcode in JSX):
 
 - `public-job-service`, `public-seeker-service` — static data
-- `saved-jobs-service`, `user-application-service`, `employer-portal-service` — `localStorage` keys prefixed `kjobs.`
-- `contact-service` — fake success
+- `saved-jobs-service`, `user-application-service` — `kjobs.saved-jobs.<userId>`, `kjobs.user-applications.<userId>`
+- `employer-portal-service` — `kjobs.employer-jobs`, `kjobs.employer-applications`
+- `contact-service` — validates and returns success, stores nothing
 
-Backend application statuses are `applied | reviewing | shortlisted | rejected | hired`. Frontend enums still say `pending | reviewed`. Job listings also have `draft`. Map them; do not rename one side quietly.
+Do not "fix" these quietly:
 
-`EmployerProfile::jobs()` points at a missing `Job` model. Listings are `JobListing`.
+- DB application status is `applied | reviewing | shortlisted | rejected | hired`. Frontend enums say `pending | reviewed`. Jobs also have `draft`.
+- `EmployerProfile::jobs()` points at a missing `Job` model. The model is `JobListing`.
+- `GET /api/admin/users` already filters `role = user`, then applies `role` again, so an employer/admin query returns nothing.
+- `isAdminAuthPath` treats `/forgot-password` as an admin auth path. That page is public.
 
-Leave `src/app/(pages)/admin/**` and `src/components/admin-*` alone unless the task is admin. Tailwind only. Shared `src/components/ui` primitives are used by admin.
+Leave `src/app/(pages)/admin/**` and `src/components/admin-*` alone unless the task is admin. Tailwind only. Shared `src/components/ui` is used by admin.
 
-Ignore leftover template files (`meal`, `school`, `subscription*`, `course-module`, `billing-invoice`, WellSnax images).
+Ignore leftover template files (`meal`, `school`, `subscription*`, `course-module`, `billing-invoice`, `types/school.ts`, WellSnax images).

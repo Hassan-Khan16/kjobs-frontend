@@ -2,7 +2,7 @@
 
 Copy this into future prompts when asking the agent to change the KJobs user-facing website.
 
-Product behavior, Laravel routes, and which screens are mocked: `docs/CONTEXT.md`.
+Product behavior, Laravel routes, mocks, and known mismatches: `docs/CONTEXT.md`. Do not "fix" the mismatches listed there unless the task asks for that.
 
 ## Always include
 
