@@ -2,17 +2,19 @@ import { cn } from "@/lib/utils";
 import type { ApplicationUiStatus } from "@/types/public-job";
 
 const styles: Record<ApplicationUiStatus, string> = {
-  pending: "bg-surface-info text-brand-royal",
+  applied: "bg-surface-info text-brand-royal",
+  reviewing: "bg-[rgba(47,91,222,0.12)] text-brand-navy-secondary",
   shortlisted: "bg-[rgba(99,102,241,0.12)] text-brand-indigo",
-  accepted: "bg-[rgba(47,91,222,0.12)] text-brand-navy-secondary",
   rejected: "bg-[#FEE2E2] text-destructive",
+  hired: "bg-[rgba(34,197,94,0.12)] text-green-600",
 };
 
 const labels: Record<ApplicationUiStatus, string> = {
-  pending: "Pending",
+  applied: "Applied",
+  reviewing: "Reviewing",
   shortlisted: "Shortlisted",
-  accepted: "Accepted",
   rejected: "Rejected",
+  hired: "Hired",
 };
 
 type ApplicationStatusBadgeProps = {

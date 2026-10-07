@@ -22,7 +22,7 @@ function isEmployerAuthPath(pathname: string): boolean {
 }
 
 function isAdminAuthPath(pathname: string): boolean {
-  return pathname === appRoutes.adminLogin || pathname === "/forgot-password";
+  return pathname === appRoutes.adminLogin;
 }
 
 export async function proxy(request: NextRequest) {

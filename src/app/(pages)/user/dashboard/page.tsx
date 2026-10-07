@@ -45,7 +45,7 @@ export default function UserDashboardPage() {
       <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
         <StatCard label="Applications" value={applications.length} />
         <StatCard label="Saved jobs" value={savedCount} />
-        <StatCard label="Pending" value={applications.filter((item) => item.status === "pending").length} />
+        <StatCard label="Applied" value={applications.filter((item) => item.status === "applied").length} />
       </div>
       <div className="rounded-2xl border border-border-default bg-white p-6">
         <h2 className="mb-4 font-ui text-base font-semibold text-brand-navy">Recent applications</h2>

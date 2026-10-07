@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { TableSearchFilterHeaderProps, TableSearchFilterOption } from "@/types/school";
+import { TableSearchFilterHeaderProps, TableSearchFilterOption } from "@/types/admin";
 
 
 

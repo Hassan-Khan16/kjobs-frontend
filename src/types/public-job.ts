@@ -6,10 +6,11 @@ export type JobType =
   | "Remote";
 
 export type ApplicationUiStatus =
-  | "pending"
+  | "applied"
+  | "reviewing"
   | "shortlisted"
-  | "accepted"
-  | "rejected";
+  | "rejected"
+  | "hired";
 
 export type PublicJob = {
   id: string;
@@ -78,7 +79,7 @@ export type EmployerJobPayload = {
 
 export type EmployerPortalJob = EmployerJobPayload & {
   id: string;
-  status: "open" | "closed";
+  status: "draft" | "open" | "closed";
   applicants: number;
   postedAt: string;
 };

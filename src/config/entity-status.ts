@@ -12,6 +12,11 @@ export const entityStatusConfig: Record<
     bg: "bg-gray-102",
     text: "text-dark-gray",
   },
+  draft: {
+    label: "Draft",
+    bg: "bg-gray-102",
+    text: "text-dark-gray",
+  },
   open: {
     label: "Open",
     bg: "bg-sky-blue-40",
@@ -22,13 +27,13 @@ export const entityStatusConfig: Record<
     bg: "bg-gray-102",
     text: "text-dark-gray",
   },
-  pending: {
-    label: "Pending",
+  applied: {
+    label: "Applied",
     bg: "bg-sky-blue-20",
     text: "text-dark-blue-5",
   },
-  reviewed: {
-    label: "Reviewed",
+  reviewing: {
+    label: "Reviewing",
     bg: "bg-sky-blue-40",
     text: "text-dark-blue-3",
   },

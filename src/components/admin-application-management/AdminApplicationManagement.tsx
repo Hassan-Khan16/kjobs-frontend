@@ -16,8 +16,8 @@ import type { AdminApplicationListItem } from "@/types/application";
 
 const applicationStatusOptions = [
   { value: "all", label: "All Status" },
-  { value: "pending", label: "Pending" },
-  { value: "reviewed", label: "Reviewed" },
+  { value: "applied", label: "Applied" },
+  { value: "reviewing", label: "Reviewing" },
   { value: "shortlisted", label: "Shortlisted" },
   { value: "rejected", label: "Rejected" },
   { value: "hired", label: "Hired" },

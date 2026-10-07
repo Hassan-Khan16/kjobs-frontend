@@ -2,7 +2,7 @@
 
 import { DataTable } from "@/components/ui/data-table";
 import TableSkeleton from "@/components/table-skleton/table-skleton";
-import { AdminPagedDataTableShellProps } from "@/types/school";
+import { AdminPagedDataTableShellProps } from "@/types/admin";
 
 export function AdminPagedDataTableShell<TData, TValue = unknown>({
   columns,

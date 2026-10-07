@@ -1,8 +1,8 @@
 import type { PaginatedResult } from "./pagination";
 
 export type ApplicationStatus =
-  | "pending"
-  | "reviewed"
+  | "applied"
+  | "reviewing"
   | "shortlisted"
   | "rejected"
   | "hired";

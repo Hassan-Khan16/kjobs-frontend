@@ -50,7 +50,7 @@ export async function applyToJob(
     jobTitle: job.title,
     company: job.company,
     location: job.location,
-    status: "pending",
+    status: "applied",
     appliedAt: new Date().toISOString(),
     coverLetter: payload.coverLetter,
     resumeName: payload.resumeName,

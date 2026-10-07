@@ -15,7 +15,7 @@ import {
 import { handleOpenToast } from "@/helper/toast";
 import type { ApplicationUiStatus } from "@/types/public-job";
 
-const STATUSES: ApplicationUiStatus[] = ["pending", "shortlisted", "accepted", "rejected"];
+const STATUSES: ApplicationUiStatus[] = ["applied", "reviewing", "shortlisted", "rejected", "hired"];
 
 export default function EmployerApplicationDetailsPage() {
   const params = useParams<{ id: string }>();

@@ -60,6 +60,18 @@ const seedJobs: EmployerPortalJob[] = [
     description: "Design end-to-end application experiences.",
     experienceLevel: "Mid",
   },
+  {
+    id: "emp-4",
+    title: "Data Engineer",
+    location: "Remote",
+    type: "Full-time",
+    salary: "$130K – $160K",
+    status: "draft",
+    applicants: 0,
+    postedAt: "2026-10-05T10:00:00.000Z",
+    description: "Build and maintain data pipelines for analytics.",
+    experienceLevel: "Mid",
+  },
 ];
 
 const seedApplications: EmployerApplication[] = [
@@ -83,7 +95,7 @@ const seedApplications: EmployerApplication[] = [
     applicantEmail: "daniel.ortiz@example.com",
     location: "Austin, TX",
     experience: "8 years",
-    status: "pending",
+    status: "applied",
     appliedAt: "2026-10-01T10:00:00.000Z",
     summary: "Led a frontend platform team at a mid-size SaaS company.",
   },
@@ -95,7 +107,7 @@ const seedApplications: EmployerApplication[] = [
     applicantEmail: "priya.nair@example.com",
     location: "Remote",
     experience: "7 years",
-    status: "accepted",
+    status: "reviewing",
     appliedAt: "2026-09-27T10:00:00.000Z",
     summary: "Product lead focused on hiring and marketplace workflows.",
   },
@@ -156,7 +168,7 @@ export async function createEmployerJob(
   const job: EmployerPortalJob = {
     id: `emp-${Date.now()}`,
     ...payload,
-    status: "open",
+    status: "draft",
     applicants: 0,
     postedAt: new Date().toISOString(),
   };
