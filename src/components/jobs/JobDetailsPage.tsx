@@ -77,7 +77,7 @@ export function JobDetailsPage({ jobId }: { jobId: string }) {
       router.push(`${appRoutes.login}?next=${encodeURIComponent(`/jobs/${jobId}`)}`);
       return;
     }
-    if (normalizeRole(session.user.role) !== userRole.USER) {
+    if (normalizeRole(session.user.role) !== userRole.JOB_SEEKER) {
       handleOpenToast("Only job seekers can apply to jobs.", "error");
       return;
     }

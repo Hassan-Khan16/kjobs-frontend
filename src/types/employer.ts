@@ -36,8 +36,6 @@ export interface AdminEmployerListItem {
 
 export interface CreateEmployerPayload {
   email: string;
-  password: string;
-  password_confirmation: string;
   company_name: string;
   contact_person_name: string;
   phone?: string;

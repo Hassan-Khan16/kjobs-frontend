@@ -1,8 +1,8 @@
 import AdminPageHeader from "@/components/admin-page-header/AdminPageHeader";
 import { AdminHeaderActionButton } from "@/components/admin-page-header/AdminHeaderActionButton";
-import AdminUserManagement from "@/components/admin-user-management/AdminUserManagement";
+import AdminJobSeekerManagement from "@/components/admin-job-seeker-management/AdminJobSeekerManagement";
 
-export default function AdminUsersPage() {
+export default function AdminJobSeekersPage() {
   return (
     <div>
       <AdminPageHeader
@@ -14,7 +14,7 @@ export default function AdminUsersPage() {
           </AdminHeaderActionButton>
         }
       />
-      <AdminUserManagement />
+      <AdminJobSeekerManagement />
     </div>
   );
 }

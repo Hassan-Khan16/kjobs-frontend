@@ -1,13 +1,15 @@
 import type { PaginatedResult } from "./pagination";
 
-export type JobListingStatus = "open" | "closed";
+export type JobListingStatus = "draft" | "open" | "closed";
 
 export interface AdminJobListing {
   id: string;
   title: string;
+  employerId: string;
   employerName: string;
   location: string;
   type: string;
+  description: string;
   status: JobListingStatus;
   createdAt: string;
   updatedAt: string;

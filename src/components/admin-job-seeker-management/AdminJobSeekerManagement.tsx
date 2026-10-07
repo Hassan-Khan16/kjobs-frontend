@@ -11,28 +11,35 @@ import ConfirmDialog from "@/components/ui/confirm-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useDebounce } from "@/hooks/use-debounce";
 import { PAGE_SIZE } from "@/constants";
-import { getUsers, patchUserStatus, getUser } from "@/services/user-service";
-import type { AdminUserListItem, AdminUser } from "@/types/user";
-import { buildUserColumns } from "./AdminUserManagementTable";
+import {
+  getJobSeekers,
+  getJobSeeker,
+  patchJobSeekerStatus,
+} from "@/services/job-seeker-service";
+import type {
+  AdminJobSeeker,
+  AdminJobSeekerListItem,
+  JobSeekerStatus,
+} from "@/types/job-seeker";
+import { buildJobSeekerColumns } from "./AdminJobSeekerManagementTable";
 import { handleOpenToast } from "@/helper/toast";
 import { API_UNAVAILABLE_MESSAGE } from "@/constants";
 import { StatusBadge } from "@/components/status-badge/StatusBadge";
-import { formatUserRole } from "@/helper/user";
 import { AdminHeaderActionButton } from "@/components/admin-page-header/AdminHeaderActionButton";
 
-export default function AdminUserManagement() {
+export default function AdminJobSeekerManagement() {
   const router = useRouter();
   const [search, setSearch] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [page, setPage] = React.useState(1);
-  const [items, setItems] = React.useState<AdminUserListItem[]>([]);
+  const [items, setItems] = React.useState<AdminJobSeekerListItem[]>([]);
   const [total, setTotal] = React.useState(0);
   const [totalPages, setTotalPages] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const [statusTarget, setStatusTarget] =
-    React.useState<AdminUserListItem | null>(null);
+    React.useState<AdminJobSeekerListItem | null>(null);
   const [statusLoading, setStatusLoading] = React.useState(false);
-  const [viewUser, setViewUser] = React.useState<AdminUser | null>(null);
+  const [viewJobSeeker, setViewJobSeeker] = React.useState<AdminJobSeeker | null>(null);
   const [viewLoading, setViewLoading] = React.useState(false);
 
   const debouncedSearch = useDebounce(search, 500);
@@ -45,7 +52,7 @@ export default function AdminUserManagement() {
     let cancelled = false;
     (async () => {
       setLoading(true);
-      const res = await getUsers({
+      const res = await getJobSeekers({
         page,
         limit: PAGE_SIZE,
         search: debouncedSearch,
@@ -67,13 +74,13 @@ export default function AdminUserManagement() {
 
   const columns = React.useMemo(
     () =>
-      buildUserColumns({
+      buildJobSeekerColumns({
         onView: async (row) => {
           setViewLoading(true);
-          const res = await getUser(row.id);
+          const res = await getJobSeeker(row.id);
           setViewLoading(false);
           if (res.success) {
-            setViewUser(res.data);
+            setViewJobSeeker(res.data);
           } else {
             handleOpenToast(res.message || API_UNAVAILABLE_MESSAGE, "error");
           }
@@ -87,20 +94,20 @@ export default function AdminUserManagement() {
   const confirmStatus = async () => {
     if (!statusTarget) return;
     setStatusLoading(true);
-    const next = statusTarget.status === "active" ? "inactive" : ("active" as const);
-    const res = await patchUserStatus(statusTarget.id, next);
+    const next: JobSeekerStatus = statusTarget.status === "active" ? "inactive" : "active";
+    const res = await patchJobSeekerStatus(statusTarget.id, next);
     setStatusLoading(false);
     if (!res.success) {
       handleOpenToast(res.message || API_UNAVAILABLE_MESSAGE, "error");
       return;
     }
     handleOpenToast(
-      `User ${next === "active" ? "activated" : "deactivated"} successfully`,
+      `Job seeker ${next === "active" ? "activated" : "deactivated"} successfully`,
       "success",
     );
     setStatusTarget(null);
     setPage(1);
-    const listRes = await getUsers({
+    const listRes = await getJobSeekers({
       page: 1,
       limit: PAGE_SIZE,
       search: debouncedSearch,
@@ -116,7 +123,7 @@ export default function AdminUserManagement() {
       <TableSearchFilterHeader
         searchValue={search}
         onSearchChange={setSearch}
-        searchPlaceholder="Search users..."
+        searchPlaceholder="Search job seekers..."
         filterValue={statusFilter}
         onFilterChange={setStatusFilter}
         filterOptions={DEFAULT_TABLE_STATUS_FILTER_OPTIONS}
@@ -130,17 +137,17 @@ export default function AdminUserManagement() {
         start={start}
         end={end}
         total={total}
-        paginationLabel="users"
+        paginationLabel="job seekers"
         loading={loading}
-        emptyMessage="No users found."
+        emptyMessage="No job seekers found."
       />
       <ConfirmDialog
         open={!!statusTarget}
         onOpenChange={(open) => !open && setStatusTarget(null)}
         title={
           statusTarget?.status === "active"
-            ? "Deactivate user?"
-            : "Activate user?"
+            ? "Deactivate job seeker?"
+            : "Activate job seeker?"
         }
         description={
           statusTarget
@@ -150,52 +157,60 @@ export default function AdminUserManagement() {
         onConfirm={confirmStatus}
         loading={statusLoading}
       />
-      <Dialog open={!!viewUser} onOpenChange={(open) => !open && setViewUser(null)}>
-        <DialogContent className="max-w-lg">
+      <Dialog open={!!viewJobSeeker} onOpenChange={(open) => !open && setViewJobSeeker(null)}>
+        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>User Details</DialogTitle>
+            <DialogTitle>Job Seeker Details</DialogTitle>
           </DialogHeader>
           {viewLoading ? (
             <div className="py-8 text-center text-sm text-gray-500">Loading...</div>
-          ) : viewUser ? (
+          ) : viewJobSeeker ? (
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <dt className="text-sm text-gray-500">Name</dt>
-                  <dd className="font-medium">{viewUser.name}</dd>
+                  <dd className="font-medium">{viewJobSeeker.name}</dd>
                 </div>
                 <div>
                   <dt className="text-sm text-gray-500">Email</dt>
-                  <dd className="font-medium">{viewUser.email}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-gray-500">Role</dt>
-                  <dd className="font-medium">{formatUserRole(viewUser.role)}</dd>
+                  <dd className="font-medium">{viewJobSeeker.email}</dd>
                 </div>
                 <div>
                   <dt className="text-sm text-gray-500">Status</dt>
-                  <dd className="mt-1">
-                    <StatusBadge status={viewUser.isActive ? "active" : "inactive"} />
-                  </dd>
+                  <dd className="mt-1"><StatusBadge status={viewJobSeeker.isActive ? "active" : "inactive"} /></dd>
                 </div>
-                <div>
-                  <dt className="text-sm text-gray-500">Created</dt>
-                  <dd className="font-medium">{viewUser.createdAt || "—"}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-gray-500">Updated</dt>
-                  <dd className="font-medium">{viewUser.updatedAt || "—"}</dd>
+                <ProfileValue label="Headline" value={viewJobSeeker.profile?.headline} />
+                <ProfileValue label="Location" value={viewJobSeeker.profile?.location} />
+                <ProfileValue label="Phone" value={viewJobSeeker.profile?.phone} />
+                <ProfileValue label="Date of Birth" value={viewJobSeeker.profile?.dateOfBirth} />
+                <ProfileValue label="Gender" value={viewJobSeeker.profile?.gender} />
+                <ProfileValue label="Resume" value={viewJobSeeker.profile?.resumePath} />
+                <ProfileValue label="LinkedIn" value={viewJobSeeker.profile?.linkedinUrl} />
+                <ProfileValue label="GitHub" value={viewJobSeeker.profile?.githubUrl} />
+                <ProfileValue label="Website / Portfolio" value={viewJobSeeker.profile?.websiteUrl} />
+                <div className="sm:col-span-2">
+                  <dt className="text-sm text-gray-500">Bio</dt>
+                  <dd className="whitespace-pre-wrap font-medium">{viewJobSeeker.profile?.bio || "—"}</dd>
                 </div>
               </div>
-              <div className="flex justify-end gap-2 pt-4">
-                <AdminHeaderActionButton href={`/admin/job-seekers/${viewUser.id}/edit`}>
-                  Edit User
+              <div className="flex justify-end border-t border-gray-200 pt-4">
+                <AdminHeaderActionButton href={`/admin/job-seekers/${viewJobSeeker.id}/edit`}>
+                  Edit Job Seeker
                 </AdminHeaderActionButton>
               </div>
             </div>
           ) : null}
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+function ProfileValue({ label, value }: { label: string; value?: string | null }) {
+  return (
+    <div className="min-w-0">
+      <dt className="text-sm text-gray-500">{label}</dt>
+      <dd className="break-words font-medium">{value || "—"}</dd>
     </div>
   );
 }

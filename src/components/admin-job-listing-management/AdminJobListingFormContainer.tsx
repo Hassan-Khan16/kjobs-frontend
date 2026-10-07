@@ -31,10 +31,10 @@ export default function AdminJobListingFormContainer({ mode, initial }: Props) {
     resolver: zodResolver(createJobListingSchema),
     defaultValues: {
       title: initial?.title ?? "",
-      employerId: "",
+      employerId: initial?.employerId ?? "",
       location: initial?.location ?? "",
       type: initial?.type ?? "",
-      description: "",
+      description: initial?.description ?? "",
     },
   });
 

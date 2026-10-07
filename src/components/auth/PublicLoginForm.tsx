@@ -28,7 +28,7 @@ export function PublicLoginForm({ initialRole = "job-seeker" }: { initialRole?: 
     event.preventDefault();
     setLoading(true);
     const providerId = role === "employer" ? "employer-credentials" : "user-credentials";
-    const allowedRole = role === "employer" ? userRole.EMPLOYER : userRole.USER;
+    const allowedRole = role === "employer" ? userRole.EMPLOYER : userRole.JOB_SEEKER;
     const res = await signIn(providerId, { redirect: false, email, password });
 
     if (res?.ok) {

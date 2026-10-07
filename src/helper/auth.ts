@@ -15,8 +15,7 @@ export function getRedirectUrlForRole(role: string | undefined): string {
     case userRole.EMPLOYER:
     case "employer":
       return appRoutes.employerDashboard;
-    case userRole.USER:
-    case "user":
+    case userRole.JOB_SEEKER:
       return appRoutes.userDashboard;
     default:
       return appRoutes.home;
@@ -31,8 +30,7 @@ export function getLoginUrlForRole(role: string | undefined): string {
     case userRole.EMPLOYER:
     case "employer":
       return `${appRoutes.login}?role=employer`;
-    case userRole.USER:
-    case "user":
+    case userRole.JOB_SEEKER:
       return `${appRoutes.login}?role=job-seeker`;
     default:
       return appRoutes.home;

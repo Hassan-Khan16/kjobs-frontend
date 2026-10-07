@@ -1,16 +1,16 @@
 import { notFound } from "next/navigation";
-import AdminUserFormContainer from "@/components/admin-user-management/AdminUserFormContainer";
-import { getUserById } from "@/services/user-service";
+import AdminJobSeekerFormContainer from "@/components/admin-job-seeker-management/AdminJobSeekerFormContainer";
+import { getJobSeeker } from "@/services/job-seeker-service";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditUserPage({
+export default async function EditJobSeekerPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const res = await getUserById(id);
+  const res = await getJobSeeker(id);
   if (!res.success) notFound();
-  return <AdminUserFormContainer mode="edit" initial={res.data} />;
+  return <AdminJobSeekerFormContainer mode="edit" initial={res.data} />;
 }

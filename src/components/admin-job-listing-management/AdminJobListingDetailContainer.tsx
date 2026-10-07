@@ -34,6 +34,10 @@ export default function AdminJobListingDetailContainer({
             <StatusBadge status={job.status} />
           </dd>
         </div>
+        <div>
+          <dt className="text-sm text-gray-116">Description</dt>
+          <dd className="whitespace-pre-wrap">{job.description}</dd>
+        </div>
       </dl>
     </div>
   );

@@ -1,5 +1,4 @@
-import type { AdminUser } from "@/types/user";
-import dayjs from "dayjs";
+import type { SessionUser } from "@/types/auth";
 
 export type ApiUserRaw = {
   id: string | number;
@@ -23,14 +22,12 @@ export function formatUserRole(role: string): string {
 
 
 
-export function mapApiUser(raw: ApiUserRaw): AdminUser {
+export function mapApiUser(raw: ApiUserRaw): SessionUser {
   return {
     id: String(raw.id),
     name: raw.name,
     email: raw.email,
     role: raw.role,
     isActive: raw.is_active ?? raw.isActive ?? true,
-    createdAt: dayjs(raw.created_at ?? raw.createdAt ?? "").format("DD/MM/YYYY HH:mm:ss"),
-    updatedAt: dayjs(raw.updated_at ?? raw.updatedAt ?? "").format("DD/MM/YYYY HH:mm:ss"),
   };
 }

@@ -13,8 +13,7 @@ function getLogoutCallbackUrl(role: string | undefined): string {
       return appRoutes.adminLogin;
     case userRole.EMPLOYER:
     case "employer":
-    case userRole.USER:
-    case "user":
+    case userRole.JOB_SEEKER:
       return appRoutes.login;
     default:
       return appRoutes.home;
@@ -44,8 +43,7 @@ export async function logoutClient(role?: string): Promise<void> {
 
 function isAuthenticatedRole(role: string): boolean {
   return (
-    role === userRole.USER ||
-    role === "user" ||
+    role === userRole.JOB_SEEKER ||
     role === userRole.EMPLOYER ||
     role === "employer"
   );

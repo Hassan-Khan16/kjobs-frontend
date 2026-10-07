@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm, type FieldErrors } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,8 +52,6 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
         }
       : {
           email: "",
-          password: "",
-          password_confirmation: "",
           companyName: "",
           contactPersonName: "",
           phone: "",
@@ -72,7 +70,6 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = form;
-  const createErrors = errors as FieldErrors<CreateEmployerFormData>;
   const {
     control: passwordControl,
     handleSubmit: handlePasswordSubmit,
@@ -105,8 +102,6 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
     const createData = data as CreateEmployerFormData;
     const payload: CreateEmployerPayload = {
       email: createData.email,
-      password: createData.password,
-      password_confirmation: createData.password_confirmation,
       company_name: createData.companyName,
       contact_person_name: createData.contactPersonName,
       phone: createData.phone,
@@ -139,7 +134,7 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
   };
 
   return (
-    <div className="p-4 lg:p-6">
+    <div>
       <AdminPageHeader
         title={isEdit ? "Edit Employer" : "Create Employer"}
         subtitle={isEdit ? "Update employer account details" : "Add a new employer account"}
@@ -211,39 +206,6 @@ export default function AdminEmployerFormContainer({ mode, initial }: Props) {
             />
           </div>
         </div>
-
-        {!isEdit && (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label required>Password</Label>
-              <Controller
-                name="password"
-                control={control}
-                render={({ field }) => (
-                  <PasswordInput
-                    {...field}
-                    error={!!createErrors.password}
-                    errorMessage={createErrors.password?.message}
-                  />
-                )}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label required>Confirm Password</Label>
-              <Controller
-                name="password_confirmation"
-                control={control}
-                render={({ field }) => (
-                  <PasswordInput
-                    {...field}
-                    error={!!createErrors.password_confirmation}
-                    errorMessage={createErrors.password_confirmation?.message}
-                  />
-                )}
-              />
-            </div>
-          </div>
-        )}
 
         <div className="space-y-2">
           <Label>Company Description</Label>

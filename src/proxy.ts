@@ -76,7 +76,7 @@ export async function proxy(request: NextRequest) {
         new URL(`${appRoutes.login}?role=job-seeker`, request.url),
       );
     }
-    if (role !== userRole.USER && role !== "user") {
+    if (role !== userRole.JOB_SEEKER) {
       return NextResponse.redirect(
         new URL(getLoginUrlForRole(role), request.url),
       );

@@ -34,8 +34,7 @@ export default function AdminLayout({
         <SiteHeader />
         <div
           className={cn(
-            "min-h-0 flex-1 min-w-0 w-full overflow-x-hidden overflow-y-auto bg-secondary",
-            !isFormPage && "p-4 lg:p-6",
+            "min-h-0 flex-1 min-w-0 w-full overflow-x-hidden overflow-y-auto bg-secondary", "p-4 lg:p-6",
           )}
         >
           {children}

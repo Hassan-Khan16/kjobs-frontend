@@ -43,7 +43,7 @@ export const authOptions: AuthOptionsWithTrustHost = {
           apiEndpoint.userLogin,
           credentials.email,
           credentials.password,
-          userRole.USER,
+          userRole.JOB_SEEKER,
         );
       },
     }),

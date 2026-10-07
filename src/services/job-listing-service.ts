@@ -10,6 +10,37 @@ import type {
   UpdateJobListingPayload,
 } from "@/types/job-listing";
 
+type JobListingResource = {
+  id: string | number;
+  employer_profile_id: string | number;
+  title: string;
+  description: string;
+  location: string;
+  job_type: string;
+  status: AdminJobListing["status"];
+  created_at: string;
+  updated_at: string;
+  employer_profile: {
+    company_name: string;
+    user: { name: string };
+  };
+};
+
+function mapJobListing(raw: JobListingResource): AdminJobListing {
+  return {
+    id: String(raw.id),
+    employerId: String(raw.employer_profile_id),
+    title: raw.title,
+    employerName: raw.employer_profile.company_name || raw.employer_profile.user.name,
+    location: raw.location,
+    type: raw.job_type,
+    description: raw.description,
+    status: raw.status,
+    createdAt: raw.created_at,
+    updatedAt: raw.updated_at,
+  };
+}
+
 function buildQuery(params: {
   page?: number;
   limit?: number;
@@ -33,7 +64,7 @@ export async function getJobListings(params: {
   const page = params.page ?? 1;
   const limit = params.limit ?? 10;
   const res = await get<{
-    items: AdminJobListingListItem[];
+    items: JobListingResource[];
     pagination: { page: number; per_page: number; total: number; last_page: number };
   }>(`${apiEndpoint.adminJobListings}?${buildQuery(params)}`);
 
@@ -49,7 +80,17 @@ export async function getJobListings(params: {
     success: true,
     message: res.message,
     data: {
-      items: res.data.items,
+      items: res.data.items.map((raw) => {
+        const job = mapJobListing(raw);
+        return {
+          id: job.id,
+          title: job.title,
+          employerName: job.employerName,
+          location: job.location,
+          status: job.status,
+          createdAt: job.createdAt,
+        };
+      }),
       meta: {
         page: res.data.pagination.page,
         limit: res.data.pagination.per_page,
@@ -62,7 +103,9 @@ export async function getJobListings(params: {
 
 export async function getJobListingById(id: string) {
   const endpoint = replacePathParams(apiEndpoint.adminJobListingById, { id });
-  return get<AdminJobListing>(endpoint);
+  const res = await get<JobListingResource>(endpoint);
+  if (!res.success) return res;
+  return { ...res, data: mapJobListing(res.data) };
 }
 
 export async function createJobListing(payload: CreateJobListingPayload) {

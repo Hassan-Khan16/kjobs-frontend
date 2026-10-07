@@ -1,16 +1,16 @@
 import { notFound } from "next/navigation";
-import AdminUserDetailContainer from "@/components/admin-user-management/AdminUserDetailContainer";
-import { getUserById } from "@/services/user-service";
+import AdminJobSeekerDetailContainer from "@/components/admin-job-seeker-management/AdminJobSeekerDetailContainer";
+import { getJobSeeker } from "@/services/job-seeker-service";
 
 export const dynamic = "force-dynamic";
 
-export default async function UserDetailPage({
+export default async function JobSeekerDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const res = await getUserById(id);
+  const res = await getJobSeeker(id);
   if (!res.success) notFound();
-  return <AdminUserDetailContainer user={res.data} />;
+  return <AdminJobSeekerDetailContainer jobSeeker={res.data} />;
 }

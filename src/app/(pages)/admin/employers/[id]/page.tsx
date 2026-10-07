@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import AdminEmployerDetailContainer from "@/components/admin-employer-management/AdminEmployerDetailContainer";
-import { getEmployerById } from "@/services/employer-service";
+import { getEmployer } from "@/services/employer-service";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +10,7 @@ export default async function EmployerDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const res = await getEmployerById(id);
+  const res = await getEmployer(id);
   if (!res.success) notFound();
   return <AdminEmployerDetailContainer employer={res.data} />;
 }

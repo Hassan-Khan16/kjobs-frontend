@@ -1,24 +1,20 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { formatUserRole } from "@/helper/user";
-import type { AdminUserListItem } from "@/types/user";
+import type { AdminJobSeekerListItem } from "@/types/job-seeker";
 import { AdminTableIconActions } from "@/components/admin-table-icon-actions/AdminTableIconActions";
 import { StatusBadge } from "@/components/status-badge/StatusBadge";
 
-export function buildUserColumns(handlers: {
-  onView: (row: AdminUserListItem) => void;
-  onEdit: (row: AdminUserListItem) => void;
-  onToggleStatus: (row: AdminUserListItem) => void;
-}): ColumnDef<AdminUserListItem>[] {
+export function buildJobSeekerColumns(handlers: {
+  onView: (row: AdminJobSeekerListItem) => void;
+  onEdit: (row: AdminJobSeekerListItem) => void;
+  onToggleStatus: (row: AdminJobSeekerListItem) => void;
+}): ColumnDef<AdminJobSeekerListItem>[] {
   return [
     { accessorKey: "name", header: "Name" },
     { accessorKey: "email", header: "Email" },
-    {
-      accessorKey: "role",
-      header: "Role",
-      cell: ({ row }) => formatUserRole(row.original.role),
-    },
+    { accessorKey: "headline", header: "Headline" },
+    { accessorKey: "location", header: "Location" },
     {
       accessorKey: "status",
       header: "Status",
